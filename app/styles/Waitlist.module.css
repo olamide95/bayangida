@@ -1,0 +1,182 @@
+.waitlistContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #042E22, #0B7F40);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.waitlistContent {
+  background: #042E22;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.waitlistTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px; /* Smaller font size for mobile */
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.waitlistSubtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px; /* Smaller font size for mobile */
+  font-weight: 400;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.waitlistForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.formGroup label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: 10px;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #042E22;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #0B7F40;
+}
+
+.submitButton {
+  background-color: #0B7F40;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #095c32;
+}
+
+/* Logo Styles */
+.logoLeft,
+.logoRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 0;
+  width: 200px; /* Adjust logo size */
+  height: auto;
+}
+
+.logoLeft {
+  left: 5%; /* Adjusted to be closer to the card */
+  animation: floatLeft 5s infinite ease-in-out;
+}
+
+.logoRight {
+  right: 5%; /* Adjusted to be closer to the card */
+  animation: floatRight 5s infinite ease-in-out;
+}
+
+/* Floating Animations */
+@keyframes floatLeft {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+  }
+  50% {
+    transform: translateY(-50%) translateX(10px);
+  }
+}
+
+@keyframes floatRight {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+  }
+  50% {
+    transform: translateY(-50%) translateX(-10px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .logoLeft,
+  .logoRight {
+    top: auto; /* Reset top positioning */
+    transform: none; /* Reset transform */
+    width: 120px; /* Smaller size for mobile */
+    height: auto;
+    animation: none; /* Disable floating animation on mobile */
+  }
+
+  .logoLeft {
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    top: -80px; /* Position above the card */
+  }
+
+  .logoRight {
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    bottom: -80px; /* Position below the card */
+    top: auto; /* Reset top positioning */
+  }
+
+  .waitlistContent {
+    margin-top: 100px; /* Add space for the top logo */
+    margin-bottom: 100px; /* Add space for the bottom logo */
+  }
+
+  .waitlistTitle {
+    font-size: 20px; /* Smaller font size for mobile */
+  }
+
+  .waitlistSubtitle {
+    font-size: 12px; /* Smaller font size for mobile */
+  }
+
+  .formGroup input,
+  .formGroup select {
+    font-size: 12px; /* Smaller font size for mobile */
+  }
+
+  .submitButton {
+    font-size: 14px; /* Smaller font size for mobile */
+    padding: 10px 15px; /* Smaller padding for mobile */
+  }
+}

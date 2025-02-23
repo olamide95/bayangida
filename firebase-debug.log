@@ -1,0 +1,70 @@
+[debug] [2025-02-23T00:05:15.980Z] ----------------------------------------------------------------------
+[debug] [2025-02-23T00:05:15.991Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init
+[debug] [2025-02-23T00:05:15.992Z] CLI Version:   13.31.2
+[debug] [2025-02-23T00:05:15.992Z] Platform:      darwin
+[debug] [2025-02-23T00:05:15.992Z] Node Version:  v22.13.1
+[debug] [2025-02-23T00:05:15.993Z] Time:          Sun Feb 23 2025 01:05:15 GMT+0100 (West Africa Standard Time)
+[debug] [2025-02-23T00:05:15.993Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-02-23T00:05:16.269Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-02-23T00:05:16.269Z] > authorizing via signed-in user (bayangidaapp@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/ayodejibabashola
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2025-02-23T00:05:33.751Z] Using project from CLI flag: audio-6220f
+[debug] [2025-02-23T00:05:33.752Z] Checked if tokens are valid: true, expires at: 1740272653665
+[debug] [2025-02-23T00:05:33.752Z] Checked if tokens are valid: true, expires at: 1740272653665
+[debug] [2025-02-23T00:05:33.754Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/audio-6220f [none]
+[debug] [2025-02-23T00:05:34.436Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/audio-6220f 403
+[debug] [2025-02-23T00:05:34.437Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/audio-6220f {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2025-02-23T00:05:34.437Z] Request to https://firebase.googleapis.com/v1beta1/projects/audio-6220f had HTTP Error: 403, The caller does not have permission
+[debug] [2025-02-23T00:05:34.775Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/audio-6220f had HTTP Error: 403, The caller does not have permission
+    at responseToError (/usr/local/lib/node_modules/firebase-tools/lib/responseToError.js:52:12)
+    at RetryOperation._fn (/usr/local/lib/node_modules/firebase-tools/lib/apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] 
+[error] Error: Failed to get Firebase project audio-6220f. Please make sure the project exists and your account has permission to access it.
+[debug] [2025-02-23T00:06:05.361Z] ----------------------------------------------------------------------
+[debug] [2025-02-23T00:06:05.365Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init
+[debug] [2025-02-23T00:06:05.365Z] CLI Version:   13.31.2
+[debug] [2025-02-23T00:06:05.365Z] Platform:      darwin
+[debug] [2025-02-23T00:06:05.365Z] Node Version:  v22.13.1
+[debug] [2025-02-23T00:06:05.366Z] Time:          Sun Feb 23 2025 01:06:05 GMT+0100 (West Africa Standard Time)
+[debug] [2025-02-23T00:06:05.366Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-02-23T00:06:05.565Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-02-23T00:06:05.565Z] > authorizing via signed-in user (bayangidaapp@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/ayodejibabashola
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
