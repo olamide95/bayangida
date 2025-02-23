@@ -5,11 +5,16 @@ import styles from '../styles/Waitlist.module.css';
 import Image from 'next/image'; // Import Next.js Image component
 import { db } from '../firebase.js'; // Import Firebase
 import { collection, addDoc } from 'firebase/firestore'; // Firestore functions
+import { useState } from 'react'; // Import useState for dialog state
 
 const Waitlist = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+  const [isSuccess, setIsSuccess] = useState(false); // Success state
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Show loading dialog
 
     // Get form data
     const formData = new FormData(e.target);
@@ -21,14 +26,18 @@ const Waitlist = () => {
       role: formData.get('role'),
     };
 
+    console.log('Form data:', data); // Log form data
+
     try {
-      // Save data to Firestore
+      console.log('Attempting to add document to Firestore...'); // Log before Firestore call
       const docRef = await addDoc(collection(db, 'waitlist'), data);
-      console.log('Document written with ID: ', docRef.id);
-      alert('Thank you for joining the waitlist! We will contact you soon.');
+      console.log('Document written with ID: ', docRef.id); // Log success
+      setIsSuccess(true); // Show success message
     } catch (error) {
-      console.error('Error adding document: ', error);
+      console.error('Error adding document: ', error); // Log error
       alert('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false); // Hide loading dialog
     }
   };
 
@@ -39,7 +48,17 @@ const Waitlist = () => {
       transition={{ duration: 0.5 }}
       className={styles.waitlistContainer}
     >
-      {/* Left Logo */}
+      {/* Top Logo (Visible on mobile) */}
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 1, type: 'spring', stiffness: 50 }}
+        className={styles.logoTop}
+      >
+        <Image src="/images/image.png" alt="Bayangida Farms Logo" width={200} height={266} />
+      </motion.div>
+
+      {/* Left Logo (Visible on tablet and desktop) */}
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -49,7 +68,7 @@ const Waitlist = () => {
         <Image src="/images/image.png" alt="Bayangida Farms Logo" width={300} height={400} />
       </motion.div>
 
-      {/* Right Logo */}
+      {/* Right Logo (Visible on tablet and desktop) */}
       <motion.div
         initial={{ x: 100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -138,11 +157,32 @@ const Waitlist = () => {
             whileTap={{ scale: 0.95 }}
             type="submit"
             className={styles.submitButton}
+            disabled={isSubmitting} // Disable button while submitting
           >
-            Join Waitlist
+            {isSubmitting ? 'Submitting...' : 'Join Waitlist'}
           </motion.button>
         </motion.form>
       </div>
+
+      {/* Loading Dialog */}
+      {isSubmitting && (
+        <div className={styles.dialogOverlay}>
+          <div className={styles.dialog}>
+            <div className={styles.spinner}></div>
+            <p>Your submission is being sent...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Success Dialog */}
+      {isSuccess && (
+        <div className={styles.dialogOverlay}>
+          <div className={styles.dialog}>
+            <p>🎉 Success! You will receive an email shortly.</p>
+            <button onClick={() => setIsSuccess(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

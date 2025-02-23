@@ -23,7 +23,7 @@
 
 .waitlistTitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 24px; /* Smaller font size for mobile */
+  font-size: 24px;
   font-weight: 700;
   color: white;
   margin-bottom: 10px;
@@ -31,7 +31,7 @@
 
 .waitlistSubtitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 14px; /* Smaller font size for mobile */
+  font-size: 14px;
   font-weight: 400;
   color: #e0e0e0;
   margin-bottom: 20px;
@@ -91,14 +91,30 @@
   background-color: #095c32;
 }
 
+.submitButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 /* Logo Styles */
+.logoTop {
+  position: absolute;
+  top: 20px; /* Position at the top */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  width: 200px;
+  height: auto;
+  animation: floatTop 5s infinite ease-in-out;
+}
+
 .logoLeft,
 .logoRight {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 0;
-  width: 200px; /* Adjust logo size */
+  width: 300px;
   height: auto;
 }
 
@@ -113,6 +129,16 @@
 }
 
 /* Floating Animations */
+@keyframes floatTop {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(10px);
+  }
+}
+
 @keyframes floatLeft {
   0%,
   100% {
@@ -134,49 +160,105 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .logoLeft,
   .logoRight {
-    top: auto; /* Reset top positioning */
-    transform: none; /* Reset transform */
-    width: 120px; /* Smaller size for mobile */
-    height: auto;
-    animation: none; /* Disable floating animation on mobile */
+    display: none; /* Hide side logos on tablet and mobile */
   }
 
-  .logoLeft {
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center horizontally */
-    top: -80px; /* Position above the card */
+  .logoTop {
+    display: block; /* Show top logo on tablet and mobile */
   }
+}
 
-  .logoRight {
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center horizontally */
-    bottom: -80px; /* Position below the card */
-    top: auto; /* Reset top positioning */
+@media (max-width: 768px) {
+  .logoTop {
+    top: 10px; /* Adjust position for mobile */
+    width: 150px; /* Smaller size for mobile */
   }
 
   .waitlistContent {
-    margin-top: 100px; /* Add space for the top logo */
-    margin-bottom: 100px; /* Add space for the bottom logo */
+    margin-top: 180px; /* Add space for the top logo */
   }
 
   .waitlistTitle {
-    font-size: 20px; /* Smaller font size for mobile */
+    font-size: 20px;
   }
 
   .waitlistSubtitle {
-    font-size: 12px; /* Smaller font size for mobile */
+    font-size: 12px;
   }
 
   .formGroup input,
   .formGroup select {
-    font-size: 12px; /* Smaller font size for mobile */
+    font-size: 12px;
   }
 
   .submitButton {
-    font-size: 14px; /* Smaller font size for mobile */
-    padding: 10px 15px; /* Smaller padding for mobile */
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+}
+
+/* Dialog Styles */
+.dialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+}
+
+.dialog p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #042E22;
+  margin-bottom: 20px;
+}
+
+.dialog button {
+  background-color: #0B7F40;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dialog button:hover {
+  background-color: #095c32;
+}
+
+/* Spinner Animation */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #0B7F40;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
