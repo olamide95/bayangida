@@ -38,7 +38,7 @@ const Waitlist = () => {
       // Step 2: Send email using Brevo
       const defaultClient = brevo.ApiClient.instance;
       const apiKey = defaultClient.authentications['api-key'];
-      apiKey.apiKey = "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"; // Use environment variable
+      apiKey.apiKey = process.env.NEXT_PUBLIC_BREVO_API_KEY; // Use environment variable
 
       const apiInstance = new brevo.TransactionalEmailsApi();
 
