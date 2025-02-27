@@ -6,6 +6,7 @@ import Image from 'next/image'; // Import Next.js Image component
 import { db } from '../firebase.js'; // Import Firebase
 import { collection, addDoc } from 'firebase/firestore'; // Firestore functions
 import { useState } from 'react'; // Import useState for dialog state
+import brevo from '@getbrevo/brevo'; // Import Brevo SDK
 
 const Waitlist = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
@@ -29,12 +30,33 @@ const Waitlist = () => {
     console.log('Form data:', data); // Log form data
 
     try {
+      // Step 1: Save data to Firestore
       console.log('Attempting to add document to Firestore...'); // Log before Firestore call
       const docRef = await addDoc(collection(db, 'waitlist'), data);
       console.log('Document written with ID: ', docRef.id); // Log success
-      setIsSuccess(true); // Show success message
+
+      // Step 2: Send email using Brevo
+      const defaultClient = brevo.ApiClient.instance;
+      const apiKey = defaultClient.authentications['api-key'];
+      apiKey.apiKey = "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"; // Use environment variable
+
+      const apiInstance = new brevo.TransactionalEmailsApi();
+
+      // Email content
+      const sendSmtpEmail = new brevo.SendSmtpEmail();
+      sendSmtpEmail.subject = 'Welcome to Bayangida Farms!';
+      sendSmtpEmail.sender = { email: "bayangidaapp@gmail.com", name: 'Bayangida Farms' };
+      sendSmtpEmail.to = [{ email: data.email, name: data.name }];
+      sendSmtpEmail.textContent = `Hi ${data.name},\n\nThank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.\n\nBest regards,\nThe Bayangida Farms Team`;
+      sendSmtpEmail.htmlContent = `<p>Hi ${data.name},</p><p>Thank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.</p><p>Best regards,<br>The Bayangida Farms Team</p>`;
+
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      console.log('Email sent successfully to:', data.email);
+
+      // Show success message
+      setIsSuccess(true);
     } catch (error) {
-      console.error('Error adding document: ', error); // Log error
+      console.error('Error:', error);
       alert('An error occurred. Please try again.');
     } finally {
       setIsSubmitting(false); // Hide loading dialog

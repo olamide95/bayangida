@@ -72,18 +72,36 @@
 }
 
 /* Hero Section Styles */
+/* Hero Section Styles */
 .hero {
   width: 100%; /* Full width */
   height: 810px;
   background-image: url('/images/banner.jpeg');
   background-size: cover;
+  background-position: center; /* Ensure the image is centered */
   display: flex;
   align-items: center;
   padding-left: 148px; /* Padding from the left */
+  position: relative; /* Needed for the overlay */
+  overflow: hidden; /* Prevent shadow from overflowing */
+}
+
+/* Dark Overlay */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px 4px 13.7px 699px rgba(0, 0, 0, 0.388) inset; /* Dark overlay */
+  pointer-events: none; /* Ensure the overlay doesn't block interactions */
 }
 
 .heroContent {
   max-width: 618px;
+  position: relative; /* Ensure content is above the overlay */
+  z-index: 1; /* Bring content to the front */
 }
 
 .heroTitle {

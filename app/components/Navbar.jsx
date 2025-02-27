@@ -1,4 +1,3 @@
-// components/Navbar.js
 import Link from 'next/link';
 import { FaSearch, FaShoppingCart, FaBars } from 'react-icons/fa'; // Import icons from React Icons
 import styles from '../styles/Home.module.css';
@@ -6,10 +5,14 @@ import styles from '../styles/Home.module.css';
 const Navbar = () => {
   return (
     <nav className={styles.navbar}>
-      {/* Logo on the leftmost side */}
+      {/* Logo Container */}
       <div className={styles.logoContainer}>
-        <img src="/images/logo.png" alt="Bayangida Farms Logo" className={styles.logo} />
-        <span className={styles.logoText}>Bayangida Farms</span>
+        <img
+          src="/images/image.png"
+          alt="Bayangida Farms Logo"
+          className={styles.logo}
+          style={{ width: '117.484px', height: '45px' }} // Set specific dimensions
+        />
       </div>
 
       {/* Navigation Menu (centered) */}
