@@ -44,7 +44,7 @@ const Waitlist = () => {
       // Email content
       const sendSmtpEmail = new brevo.SendSmtpEmail();
       sendSmtpEmail.subject = 'Welcome to Bayangida Farms!';
-      sendSmtpEmail.sender = { email: "bayangidaapp@gmail.com", name: 'Bayangida Farms' };
+      sendSmtpEmail.sender = { email: process.env.NEXT_PUBLIC_EMAIL_FROM, name: 'Bayangida Farms' };
       sendSmtpEmail.to = [{ email: data.email, name: data.name }];
       sendSmtpEmail.textContent = `Hi ${data.name},\n\nThank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.\n\nBest regards,\nThe Bayangida Farms Team`;
       sendSmtpEmail.htmlContent = `<p>Hi ${data.name},</p><p>Thank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.</p><p>Best regards,<br>The Bayangida Farms Team</p>`;
