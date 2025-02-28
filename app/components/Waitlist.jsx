@@ -15,9 +15,8 @@ const Waitlist = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Show loading dialog
-
-    // Get form data
+    setIsSubmitting(true);
+  
     const formData = new FormData(e.target);
     const data = {
       name: formData.get('name'),
@@ -26,39 +25,29 @@ const Waitlist = () => {
       location: formData.get('location'),
       role: formData.get('role'),
     };
-
-    console.log('Form data:', data); // Log form data
-
+  
     try {
-      // Step 1: Save data to Firestore
-      console.log('Attempting to add document to Firestore...'); // Log before Firestore call
+      // Save data to Firestore
       const docRef = await addDoc(collection(db, 'waitlist'), data);
-      console.log('Document written with ID: ', docRef.id); // Log success
-
-      // Step 2: Send email using Brevo
-      const defaultClient = brevo.ApiClient.instance;
-      const apiKey = defaultClient.authentications['api-key'];
-      apiKey.apiKey = process.env.NEXT_PUBLIC_BREVO_API_KEY;
-      const apiInstance = new brevo.TransactionalEmailsApi();
-
-      // Email content
-      const sendSmtpEmail = new brevo.SendSmtpEmail();
-      sendSmtpEmail.subject = 'Welcome to Bayangida Farms!';
-      sendSmtpEmail.sender = { email: process.env.NEXT_PUBLIC_EMAIL_FROM, name: 'Bayangida Farms' };
-      sendSmtpEmail.to = [{ email: data.email, name: data.name }];
-      sendSmtpEmail.textContent = `Hi ${data.name},\n\nThank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.\n\nBest regards,\nThe Bayangida Farms Team`;
-      sendSmtpEmail.htmlContent = `<p>Hi ${data.name},</p><p>Thank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.</p><p>Best regards,<br>The Bayangida Farms Team</p>`;
-
-      await apiInstance.sendTransacEmail(sendSmtpEmail);
-      console.log('Email sent successfully to:', data.email);
-
-      // Show success message
-      setIsSuccess(true);
+      console.log('Document written with ID: ', docRef.id);
+  
+      // Send email via API route
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, name: data.name }),
+      });
+  
+      if (response.ok) {
+        setIsSuccess(true);
+      } else {
+        alert('Failed to send email. Please try again.');
+      }
     } catch (error) {
       console.error('Error:', error);
       alert('An error occurred. Please try again.');
     } finally {
-      setIsSubmitting(false); // Hide loading dialog
+      setIsSubmitting(false);
     }
   };
 
