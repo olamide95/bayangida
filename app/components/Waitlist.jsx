@@ -6,8 +6,6 @@ import Image from 'next/image'; // Import Next.js Image component
 import { db } from '../firebase.js'; // Import Firebase
 import { collection, addDoc } from 'firebase/firestore'; // Firestore functions
 import { useState } from 'react'; // Import useState for dialog state
-import brevo from '@getbrevo/brevo'; // Import Brevo SDK
-
 const Waitlist = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
   const [isSuccess, setIsSuccess] = useState(false); // Success state
