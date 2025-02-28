@@ -1,3 +1,4 @@
+// app/api/send-email/route.js
 import { NextResponse } from 'next/server';
 const Mailjet = require('node-mailjet');
 
@@ -9,7 +10,8 @@ export async function POST(request) {
     process.env.MAILJET_API_SECRET
   );
 
-  const request = mailjet.post('send', { version: 'v3.1' }).request({
+  // Rename this variable to avoid conflict
+  const emailRequest = mailjet.post('send', { version: 'v3.1' }).request({
     Messages: [
       {
         From: {
@@ -30,7 +32,7 @@ export async function POST(request) {
   });
 
   try {
-    await request;
+    await emailRequest; // Use the renamed variable here
     return NextResponse.json({ message: 'Email sent successfully!' });
   } catch (error) {
     console.error('Error sending email:', error);
