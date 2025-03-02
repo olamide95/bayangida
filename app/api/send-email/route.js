@@ -28,7 +28,7 @@ export async function POST(request) {
       </p>
       <p style="color: #555; font-size: 16px; line-height: 1.6;">
         Best regards,<br>
-        <strong>The Bayangida Farms Team</strong>
+        <strong>The Bayangida Farms Marketing Team</strong>
       </p>
       <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #888;">
         <p>Bayangida Farms &copy; ${new Date().getFullYear()}</p>
@@ -51,7 +51,7 @@ export async function POST(request) {
           },
         ],
         Subject: 'Welcome to Bayangida Farms!',
-        TextPart: `Hi ${name},\n\nThank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.\n\nBest regards,\nThe Bayangida Farms Team`,
+        TextPart: `Hi ${name},\n\nThank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.\n\nBest regards,\nThe Bayangida Farms Marketing Team`,
         HTMLPart: emailHtml, // Use the designed HTML template
       },
     ],
