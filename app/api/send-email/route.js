@@ -14,7 +14,7 @@ export async function POST(request) {
   const emailHtml = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="images/image.png" alt="Bayangida Farms Logo" style="max-width: 150px; height: auto;">
+        <img src="https://www.bayangidafarms.com/images/image.png" alt="Bayangida Farms Logo" style="max-width: 150px; height: auto;">
       </div>
       <h2 style="color: #333; text-align: center;">Welcome to Bayangida Farms!</h2>
       <p style="color: #555; font-size: 16px; line-height: 1.6;">
@@ -32,7 +32,7 @@ export async function POST(request) {
       </p>
       <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #888;">
         <p>Bayangida Farms &copy; ${new Date().getFullYear()}</p>
-        <p><a href="https://bayangidafarms.com" style="color: #007bff; text-decoration: none;">Visit our website</a></p>
+        <p><a href="https://www.bayangidafarms.com/" style="color: #007bff; text-decoration: none;">Visit our website</a></p>
       </div>
     </div>
   `;
