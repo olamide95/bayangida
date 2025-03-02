@@ -26,7 +26,7 @@ export async function POST(request) {
         ],
         Subject: 'Welcome to Bayangida Farms!',
         TextPart: `Hi ${name},\n\nThank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.\n\nBest regards,\nThe Bayangida Farms Team`,
-        HTMLPart: `<p>Hi ${name},</p><p>Thank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.</p><p>Best regards,<br>The Bayangida Farms Team</p>`,
+        HTMLPart: `<p>Hi ${name},</p><p>Thank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.</p><p>Best regards,<br>The Bayangida Farms Marketing Team</p>`,
       },
     ],
   });
