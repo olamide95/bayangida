@@ -1,0 +1,310 @@
+/* Main Container */
+.mainContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 157px auto 0;
+  padding: 0 120px;
+}
+
+/* Product Details Container */
+.productDetailsContainer {
+  display: flex;
+  gap: 24px;
+}
+
+/* Left Column */
+.leftColumn {
+  width: 600px;
+  padding: 0 15px;
+}
+
+.productImageContainer {
+  width: 585px;
+  height: 570px;
+  border-radius: 22px;
+  border: 2px solid #0b7f40;
+  box-shadow: 0px 4px 19.7px 0px rgba(0, 0, 0, 0.4);
+  padding: 32px;
+}
+
+.productImage {
+  width: 521px;
+  height: 506px;
+  border-radius: 22px;
+  object-fit: cover;
+}
+
+.thumbnailContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.thumbnail {
+  width: 176.64px;
+  height: 176.64px;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+}
+
+/* Right Column */
+.rightColumn {
+  width: 570px;
+}
+
+.productName {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
+  color: #0d3c00;
+  margin-bottom: 20px;
+}
+
+.ratingContainer {
+  display: flex;
+  gap: 4.6px;
+  margin-bottom: 20px;
+}
+
+.starIcon {
+  color: #eca61b;
+  font-size: 24px;
+}
+
+.productPrice {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 38px;
+  color: #0b7f40;
+  margin-bottom: 20px;
+}
+
+.productDescription {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 28px;
+  color: #444444;
+  margin-bottom: 20px;
+}
+
+.quantityContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.quantityButton {
+  width: 96px;
+  height: 51px;
+  border-radius: 40px;
+  border: 2px solid #9ef84a;
+  background: #0b7f40;
+  color: white;
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.84px;
+  cursor: pointer;
+}
+
+.quantity {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19.84px;
+  color: #0b7f40;
+}
+
+.addToCartButton {
+  width: 167.91px;
+  height: 54px;
+  border-radius: 30px;
+  background: #0b7f40;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 13.45px;
+  line-height: 14px;
+  cursor: pointer;
+}
+
+.addToWishlistButton {
+  width: 94px;
+  height: 28.5px;
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 28.5px;
+  color: #444444;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Reviews Section */
+.reviewsSection {
+  width: 100%;
+  margin-top: 40px;
+  padding-left: 15px; /* Padding only on the left */
+}
+
+.reviewsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.reviewsTitle {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 700;
+  font-size: 38.16px;
+  line-height: 47.31px;
+  color: #042e22;
+}
+
+.seeAllButton {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 22.26px;
+  line-height: 33.39px;
+  color: #042e22;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.reviewsContainer {
+  display: flex;
+  gap: 15.9px;
+  overflow-x: auto;
+  padding-left: 15px; /* Padding only on the left */
+  padding-right: 0; /* No padding on the right */
+}
+
+.reviewCard {
+  width: 405.4px;
+  height: 224.37px;
+  gap: 15.9px;
+  padding: 15.9px;
+  border-top-left-radius: 31.8px;
+  border-bottom-right-radius: 31.8px;
+  background-color: #f2f2f2;
+  flex-shrink: 0; /* Prevent cards from shrinking */
+}
+
+.reviewName {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
+  font-size: 25.44px;
+  line-height: 31.8px;
+  color: #042e22;
+}
+
+.reviewRating {
+  display: flex;
+  gap: 4.6px;
+  margin-bottom: 10px;
+}
+
+.reviewComment {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 400;
+  font-size: 19.08px;
+  line-height: 28.62px;
+  color: #000000;
+}
+
+/* Similar Products Section */
+.similarProductsSection {
+  width: 100%;
+  margin-top: 40px;
+  padding-left: 15px; /* Padding only on the left */
+}
+
+.similarProductsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.similarProductsTitle {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 700;
+  font-size: 38.16px;
+  line-height: 47.31px;
+  color: #042e22;
+}
+
+.similarProductsContainer {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding-left: 15px; /* Padding only on the left */
+  padding-right: 0; /* No padding on the right */
+}
+
+.similarProductCard {
+  width: 360px;
+  height: 333px;
+  gap: 24px;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid #0b7f40;
+  background-color: white;
+  flex-shrink: 0; /* Prevent cards from shrinking */
+}
+
+.similarProductImage {
+  width: 100%;
+  height: 165px;
+  border-radius: 9px;
+  object-fit: cover;
+}
+
+.similarProductDetails {
+  padding: 10px 0;
+}
+
+.similarProductHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.similarProductName {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 36px;
+  color: #042e22;
+}
+
+.similarProductPrice {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #0b7f40;
+}
+
+.similarProductFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rating {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #0b7f40;
+}

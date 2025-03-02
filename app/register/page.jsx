@@ -12,7 +12,7 @@ export default function LoginPage() {
         <img
           src="/images/main4.jpeg"
           alt="Login Background"
-          className="absolute inset-0 -top-[3px] h-[1029px] w-[720px] object-cover rounded-tr-[26px] rounded-br-[26px] dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 -top-[3px] h-[1029px] w-[920px] object-cover rounded-tr-[26px] rounded-br-[26px] dark:brightness-[0.2] dark:grayscale"
         />
       </div>
 
@@ -22,11 +22,10 @@ export default function LoginPage() {
       
         {/* Centered Login Form */}
         <div className="flex flex-1 items-center justify-center">
+           <div className="w-full max-w-[570px]">
+           <CreateAccountForm />
+           </div>
           
-          <div className="w-full max-w-xs">
-            
-            <CreateAccountForm />
-          </div>
         </div>
       </div>
     </div>

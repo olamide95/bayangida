@@ -5,17 +5,26 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Label } from "@/components/ui/label";
-
+ 
 export function CreateAccountForm({ className, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div className={cn("absolute top-[245px] left-[799px] w-[529px] h-[750px] flex items-center justify-center", className)} {...props}>
-      <Card className="w-full h-full rounded-[34px] shadow-lg p-8 bg-[#042E22]">
+    <div className={cn(
+      "w-[570px] h-[776px] flex items-center justify-center",
+      className
+    )}
+    {...props}
+  >
+    <Card className="w-full h-full rounded-[34px] shadow-lg p-8 bg-[#042E22]">
         <CardContent className="flex flex-col items-center gap-4">
-          <h2 className="text-white text-center text-3xl font-bold mb-2">Create Account</h2>
-
+        <h2
+            className="text-[48px] font-bold leading-[68px] tracking-[0%] text-[#0B7F40] mb-6"
+            style={{ fontFamily: "Cabinet Grotesk Variable" }}
+          >
+            Create account
+          </h2>
           {/* First Name & Last Name */}
           <div className="flex gap-5 w-full ">
             <div className="flex flex-col">

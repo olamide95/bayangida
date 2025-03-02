@@ -27,7 +27,7 @@ export function VerifyCodeForm({ className, ...props }) {
   return (
     <div
       className={cn(
-        "absolute top-[245px] left-[799px] w-[529px] h-[580px] flex items-center justify-center",
+        "w-[570px] h-[776px] flex items-center justify-center",
         className
       )}
       {...props}
@@ -36,17 +36,12 @@ export function VerifyCodeForm({ className, ...props }) {
         <CardContent className="flex flex-col items-center">
           {/* Verify Your Code Header */}
           <h2
-            className="text-white text-center font-bold"
-            style={{
-              width: "462px",
-              height: "66px",
-              fontSize: "32px",
-              lineHeight: "66px",
-            }}
+            className="text-[48px] font-bold leading-[68px] tracking-[0%] text-[#0B7F40] mb-6"
+            style={{ fontFamily: "Cabinet Grotesk Variable" }}
           >
-            Verify Your Code
+             Verify Your Code
           </h2>
-
+         
           {/* Subtext */}
           <p
             className="text-white text-center mt-2"

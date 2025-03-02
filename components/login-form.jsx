@@ -12,13 +12,21 @@ export function LoginForm({ className, ...props }) {
   return (
     <div
       className={cn(
-        "absolute top-[245px] left-[799px] w-[529px] h-[580px] flex items-center justify-center",
+        "w-[570px] h-[776px] flex items-center justify-center",
         className
       )}
       {...props}
     >
       <Card className="w-full h-full rounded-[34px] shadow-lg p-8 bg-[#042E22]">
         <CardContent>
+           {/* "Register" Text Inside  the Card */}
+           <h2
+            className="text-[48px] font-bold leading-[68px] tracking-[0%] text-[#0B7F40] mb-6"
+            style={{ fontFamily: "Cabinet Grotesk Variable" }}
+          >
+            Login
+          </h2>
+
           <form className="flex flex-col gap-6 items-center"> {/* Center the form content */}
             {/* Email Input */}
             <div className="grid gap-2 w-full max-w-[358px]">

@@ -11,7 +11,7 @@ export default function LoginPage() {
         <img
           src="/images/bayangida1.jpeg"
           alt="Login Background"
-          className="absolute inset-0 -top-[3px] h-[1029px] w-[720px] object-cover rounded-tr-[26px] rounded-br-[26px] dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 -top-[3px] h-[1029px] w-[920px] object-cover rounded-tr-[26px] rounded-br-[26px] dark:brightness-[0.2] dark:grayscale"
         />
       </div>
 
