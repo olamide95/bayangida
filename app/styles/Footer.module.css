@@ -1,0 +1,150 @@
+/* Footer Styles */
+footer {
+  background-color: #042E22;
+  color: white;
+  padding: 80px 20px; /* Increased padding for better spacing */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* Single column on mobile */
+  gap: 40px; /* Increased gap for better spacing */
+}
+
+.grid > div {
+  text-align: center; /* Center content on mobile */
+}
+
+.grid h3 {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-weight: 700;
+  font-size: 24px; /* Adjusted for mobile */
+  line-height: 30px;
+  margin-bottom: 20px;
+}
+
+.grid p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px; /* Adjusted for mobile */
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+
+.grid ul {
+  list-style: none;
+  padding: 0;
+}
+
+.grid ul li {
+  margin-bottom: 10px;
+}
+
+.grid ul li a {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px; /* Adjusted for mobile */
+  line-height: 20px;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.grid ul li a:hover {
+  color: #0B7F40;
+}
+
+.grid .flex {
+  display: flex;
+  justify-content: center; /* Center icons on mobile */
+  gap: 10px; /* Reduced gap for mobile */
+}
+
+.grid .flex img {
+  width: 120px; /* Adjusted for mobile */
+  height: auto;
+}
+
+.grid input {
+  width: 100%; /* Full width on mobile */
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px; /* Adjusted for mobile */
+  color: #042E22;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.grid input:focus {
+  border-color: #0B7F40;
+}
+
+.grid button {
+  width: 100%; /* Full width on mobile */
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #0B7F40;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px; /* Adjusted for mobile */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.grid button:hover {
+  background-color: #095c32;
+}
+
+/* Responsive Design for Tablet and Desktop */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr); /* Four columns for tablet and desktop */
+    gap: 40px; /* Restore gap for tablet and desktop */
+  }
+
+  .grid > div {
+    text-align: left; /* Align content to the left for tablet and desktop */
+  }
+
+  .grid h3 {
+    font-size: 24px; /* Restore size for tablet and desktop */
+    line-height: 30px;
+  }
+
+  .grid p {
+    font-size: 16px; /* Restore size for tablet and desktop */
+    line-height: 24px;
+  }
+
+  .grid ul li a {
+    font-size: 16px; /* Restore size for tablet and desktop */
+    line-height: 24px;
+  }
+
+  .grid .flex {
+    justify-content: flex-start; /* Align icons to the left for tablet and desktop */
+  }
+
+  .grid .flex img {
+    width: 143px; /* Restore size for tablet and desktop */
+  }
+
+  .grid input {
+    width: 100%; /* Full width for tablet and desktop */
+  }
+
+  .grid button {
+    width: auto; /* Auto width for tablet and desktop */
+    padding: 10px 20px;
+  }
+}

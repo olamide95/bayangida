@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaFacebook, FaTwitter, FaPinterest, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaPinterest, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -26,23 +26,23 @@ const Footer = () => {
 
             {/* Social Media Icons */}
             <div className="flex space-x-4">
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                <FaTwitter className="w-[10.5px] h-[14px]" />
+              <a href="https://x.com/bayangidafarms?s=08" target="_blank" rel="noopener noreferrer">
+                <FaTwitter className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                <FaFacebook className="w-[10.5px] h-[14px]" />
+              <a href="https://www.facebook.com/profile.php?id=61559698063938&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">
+                <FaFacebook className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
-              <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer">
-                <FaPinterest className="w-[10.5px] h-[14px]" />
+              <a href="https://www.linkedin.com/company/bayangida-farms/posts/?feedView=all" target="_blank" rel="noopener noreferrer">
+                <FaLinkedinIn className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                <FaInstagram className="w-[10.5px] h-[14px]" />
+              <a href="https://www.instagram.com/bayangidafarms?igsh=dWVkNHJhOGxiZWRo" target="_blank" rel="noopener noreferrer">
+                <FaInstagram className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
             </div>
           </div>
 
           {/* Second Column: Quick Links */}
-          <div className="pl-12">
+          <div>
             <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-6">
               Quick Links
             </h3>
@@ -75,9 +75,19 @@ const Footer = () => {
             <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[29.39px] mb-6">
               Get the Bayangida Mobile App
             </h3>
-            <div className="flex space-x-4"> {/* Updated: Flex layout for side-by-side images */}
+            <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
               <img src="/images/ios.png" alt="Download on iOS" className="w-[143px] h-[63px]" />
               <img src="/images/android.png" alt="Download on Android" className="w-[143px] h-[63px]" />
+            </div>
+
+            {/* Sign In Buttons */}
+            <div className="mt-6 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+              <button className="w-full md:w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
+                Sign In as a Farmer
+              </button>
+              <button className="w-full md:w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
+                Sign In as Logistics
+              </button>
             </div>
           </div>
 
@@ -91,22 +101,17 @@ const Footer = () => {
               placeholder="Email"
               className="w-full h-[49px] rounded-xl px-4 py-3 mb-4 font-inter font-normal text-sm leading-[18.15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0099FF]"
             />
-            <button className="w-[180.28px] h-[40px] bg-[#0B7F40] rounded-full opacity-52 font-inter font-normal text-sm leading-[18.15px] text-white">
+            <button className="w-full md:w-[180.28px] h-[40px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
               Subscribe
             </button>
           </div>
         </div>
 
-        {/* Sign In Buttons */}
-        <div className="mt-12 flex justify-end"> {/* Updated: Align buttons to the right */}
-          <div className="flex space-x-4"> {/* Updated: Flex layout for side-by-side buttons */}
-            <button className="w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white">
-              Sign In as a Farmer
-            </button>
-            <button className="w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white">
-              Sign In as Logistics
-            </button>
-          </div>
+        {/* Copyright */}
+        <div className="text-center mt-8">
+          <p className="font-montserrat font-normal text-sm leading-7 text-white">
+            Copyright ©2024 Bayangida. All Rights Reserved
+          </p>
         </div>
       </div>
     </footer>

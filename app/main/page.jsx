@@ -1,14 +1,16 @@
-// pages/index.js
+'use client';
+
 import Head from 'next/head';
 import Navbar from '../components/Navbar.jsx';
 import Hero from '../components/Hero.jsx';
 import About from '../components/About.jsx';
-import TrendingProducts from '../components/TrendingProducts.jsx';
-import styles from '../styles/Home.module.css';
+import Waitlist from '../components/waitmain.jsx'; // Import Waitlist
 import LatestNews from '../components/LatestNews';
 import Footer from '../components/Footer';
+import { motion } from 'framer-motion'; // Import Framer Motion
+import styles from '../styles/Home.module.css';
 
-export default function Home() {
+export default function Main() {
   return (
     <div>
       <Head>
@@ -19,14 +21,39 @@ export default function Home() {
 
       <Navbar />
       <Hero />
-      <div className={styles.container}>
-     
-      <About />
-      <TrendingProducts />
-      <LatestNews />
-      </div>
-      <Footer />
 
+      {/* About Section with Animation */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <About />
+      </motion.div>
+
+      {/* Waitlist Section with Animation */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        viewport={{ once: true }}
+        className={styles.waitlistWrapper}
+      >
+        <Waitlist />
+      </motion.div>
+
+      {/* Latest News Section with Animation */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+        viewport={{ once: true }}
+      >
+        <LatestNews />
+      </motion.div>
+
+      <Footer />
     </div>
   );
 }

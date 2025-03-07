@@ -1,4 +1,4 @@
-// components/LatestNews.js
+import { motion } from 'framer-motion'; // Import Framer Motion
 import styles from '../styles/Home.module.css';
 import { FaCalendar, FaComment } from 'react-icons/fa'; // Import icons for date and comments
 
@@ -31,12 +31,24 @@ const LatestNews = () => {
   ];
 
   return (
-    <section className={styles.latestNews}>
+    <motion.section
+      initial={{ opacity: 0, y: 50 }} // Initial state (hidden and slightly below)
+      whileInView={{ opacity: 1, y: 0 }} // Animate to visible and in place
+      transition={{ duration: 0.8 }} // Animation duration
+      viewport={{ once: true }} // Only animate once
+      className={styles.latestNews}
+    >
       <h2 className={styles.latestNewsTitle}>Latest News and Blogs</h2>
       <h3 className={styles.popularArticlesTitle}>Popular Articles and Tips</h3>
       <div className={styles.articleGrid}>
-        {articles.map((article) => (
-          <div key={article.id} className={styles.articleCard}>
+        {articles.map((article, index) => (
+          <motion.div
+            key={article.id}
+            initial={{ opacity: 0, y: 50 }} // Initial state for each article card
+            whileInView={{ opacity: 1, y: 0 }} // Animate to visible
+            transition={{ delay: index * 0.2, duration: 0.8 }} // Staggered delay based on index
+            className={styles.articleCard}
+          >
             <img src={article.image} alt={article.title} className={styles.articleImage} />
             <div className={styles.articleContent}>
               <span className={styles.articleCategory}>{article.category}</span>
@@ -52,10 +64,10 @@ const LatestNews = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
 

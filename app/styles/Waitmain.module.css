@@ -1,0 +1,219 @@
+/* Waitlist Container */
+.waitlistContainer {
+  display: flex;
+  flex-direction: column; /* Stack write-up and form vertically on mobile */
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 20px; /* Adjusted for mobile */
+  background: linear-gradient(135deg, #042E22, #0B7F40);
+  gap: 40px;
+}
+
+/* Left Side: Write-Up */
+.writeUp {
+  width: 100%; /* Full width on mobile */
+  max-width: 100%; /* Full width on mobile */
+  color: white;
+  text-align: center; /* Center text on mobile */
+}
+
+.writeUpTitle {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-size: 36px; /* Adjusted for mobile */
+  font-weight: 700;
+  line-height: 40px; /* Adjusted for mobile */
+  margin-bottom: 20px;
+}
+
+.writeUpText {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600; /* Bolder text */
+  line-height: 28px;
+  margin-bottom: 20px;
+}
+
+.writeUpList {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.writeUpList li {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600; /* Bolder text */
+  line-height: 24px;
+  margin-bottom: 10px;
+}
+
+/* Right Side: Form Card */
+.formCard {
+  width: 100%; /* Full width on mobile */
+  max-width: 100%; /* Full width on mobile */
+  background: white;
+  padding: 20px; /* Adjusted for mobile */
+  border-radius: 15px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.formTitle {
+  font-family: 'Cabinet Grotesk Variable', sans-serif;
+  font-size: 24px; /* Adjusted for mobile */
+  font-weight: 700;
+  color: #042E22;
+  margin-bottom: 20px;
+}
+
+.waitlistForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #042E22;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: 10px;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #042E22;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #0B7F40;
+}
+
+.submitButton {
+  background-color: #0B7F40;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #095c32;
+}
+
+.submitButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Dialog Styles */
+.dialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+}
+
+.dialog p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #042E22;
+  margin-bottom: 20px;
+}
+
+.dialog button {
+  background-color: #0B7F40;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dialog button:hover {
+  background-color: #095c32;
+}
+
+/* Spinner Animation */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #0B7F40;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design for Tablet and Desktop */
+@media (min-width: 768px) {
+  /* Waitlist Container */
+  .waitlistContainer {
+    flex-direction: row; /* Display write-up and form side by side for tablet and desktop */
+    padding: 80px 20px; /* Restore padding for tablet and desktop */
+  }
+
+  /* Left Side: Write-Up */
+  .writeUp {
+    width: 50%; /* Restore width for tablet and desktop */
+    max-width: 50%; /* Restore width for tablet and desktop */
+    text-align: left; /* Align text to the left for tablet and desktop */
+  }
+
+  .writeUpTitle {
+    font-size: 48px; /* Restore size for tablet and desktop */
+    line-height: 52.8px; /* Restore line height for tablet and desktop */
+  }
+
+  /* Right Side: Form Card */
+  .formCard {
+    width: 50%; /* Restore width for tablet and desktop */
+    max-width: 50%; /* Restore width for tablet and desktop */
+    padding: 40px; /* Restore padding for tablet and desktop */
+  }
+
+  .formTitle {
+    font-size: 32px; /* Restore size for tablet and desktop */
+  }
+}

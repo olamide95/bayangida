@@ -1,0 +1,98 @@
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Full width */
+    height: 76px;
+    background-color: #042E22;
+    color: white;
+    padding: 0 20px; /* Consistent padding with the container */
+    position: relative; /* Needed for the mobile menu */
+  }
+  
+  .logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .logo {
+    width: 45px; /* Adjust based on your logo size */
+    height: 45px;
+  }
+  
+  .navMenu {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .navLink {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 0; /* Add padding for better click area */
+    transition: background-color 0.3s ease;
+  }
+  
+  .navLink:hover {
+    background-color: #0B7F40;
+    padding: 10px 24px;
+    border-radius: 54px;
+  }
+  
+  .navIcons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+    color: #0B7F40; /* High green color for icons */
+    cursor: pointer;
+    transition: color 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .icon:hover {
+    color: #095c32; /* Darker green on hover */
+  }
+  
+  .menuIcon {
+    display: none; /* Hide by default */
+    font-size: 24px;
+    color: #0B7F40;
+    cursor: pointer;
+  }
+  /* Active Nav Link */
+.navLink.active {
+  background-color: #0B7F40; /* Same as hover */
+  padding: 10px 24px; /* Same as hover */
+  border-radius: 54px; /* Same as hover */
+}
+  
+  /* Responsive Design for Mobile and Tablet */
+  @media (max-width: 768px) {
+    .navMenu {
+      display: none; /* Hide the menu by default on mobile */
+      flex-direction: column;
+      position: absolute;
+      top: 76px; /* Height of the navbar */
+      left: 0;
+      width: 100%;
+      background-color: #042E22;
+      padding: 20px;
+      gap: 10px;
+      z-index: 1000;
+    }
+  
+    .navMenu.active {
+      display: flex; /* Show the menu when active */
+    }
+  
+    .menuIcon {
+      display: block; /* Show the menu icon on mobile */
+    }
+  }
