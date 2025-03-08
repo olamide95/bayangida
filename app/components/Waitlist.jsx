@@ -94,7 +94,7 @@ const Waitlist = () => {
           transition={{ delay: 0.4, duration: 0.5 }}
           className={styles.waitlistTitle}
         >
-          Join the Bayangida Farms Waitlist
+          Coming soon on the android and ios platform
         </motion.h1>
         <motion.p
           initial={{ y: -50, opacity: 0 }}
@@ -102,7 +102,7 @@ const Waitlist = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
           className={styles.waitlistSubtitle}
         >
-          Be the first to know about our latest updates, products, and services.
+          Be the first to know when we launch.
         </motion.p>
         <motion.form
           initial={{ y: 50, opacity: 0 }}

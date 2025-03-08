@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaFacebook, FaTwitter, FaPinterest, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -75,19 +75,28 @@ const Footer = () => {
             <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[29.39px] mb-6">
               Get the Bayangida Mobile App
             </h3>
+            {/* App Download Links */}
             <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-              <img src="/images/ios.png" alt="Download on iOS" className="w-[143px] h-[63px]" />
-              <img src="/images/android.png" alt="Download on Android" className="w-[143px] h-[63px]" />
+              <Link href="/products">
+                <img src="/images/ios.png" alt="Download on iOS" className="w-[123px] h-[53px]" />
+              </Link>
+              <Link href="/products">
+                <img src="/images/android.png" alt="Download on Android" className="w-[123px] h-[53px]" />
+              </Link>
             </div>
 
             {/* Sign In Buttons */}
-            <div className="mt-6 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-              <button className="w-full md:w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
-                Sign In as a Farmer
-              </button>
-              <button className="w-full md:w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
-                Sign In as Logistics
-              </button>
+            <div className="flex flex-col space-y-4 mt-4">
+              <Link href="/products">
+                <button className="w-full md:w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
+                  Sign In as a Farmer
+                </button>
+              </Link>
+              <Link href="/products">
+                <button className="w-full md:w-[229px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
+                  Sign In as Logistics Provider
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -110,7 +119,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="text-center mt-8">
           <p className="font-montserrat font-normal text-sm leading-7 text-white">
-            Copyright ©2024 Bayangida. All Rights Reserved
+            Copyright ©2025 Bayangida. All Rights Reserved
           </p>
         </div>
       </div>

@@ -62,10 +62,10 @@ const Navbar = () => {
 
       {/* Icons on the rightmost side */}
       <div className={styles.navIcons}>
-        <Link href="/search">
+        <Link href="/products">
           <FaSearch className={styles.icon} />
         </Link>
-        <Link href="/cart">
+        <Link href="/products">
           <FaShoppingCart className={styles.icon} />
         </Link>
         {/* Hamburger Menu Icon */}

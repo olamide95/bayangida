@@ -50,7 +50,7 @@ export default function Main() {
         transition={{ duration: 0.8, delay: 0.4 }}
         viewport={{ once: true }}
       >
-        <LatestNews />
+        <LatestNews /> 
       </motion.div>
 
       <Footer />

@@ -47,7 +47,7 @@ const Contact = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className={styles.heroTitle}
           >
-            Contact Us
+            Contact Us!
           </motion.h1>
         </div>
       </motion.section>
@@ -85,7 +85,7 @@ const Contact = () => {
               transition={{ delay: 0.6, duration: 0.8 }}
               className={styles.contactInfoText}
             >
-              customercare@bayangida.ng
+              customercare@bayangidafarms.com
             </motion.p>
           </motion.div>
 
@@ -141,7 +141,7 @@ const Contact = () => {
               transition={{ delay: 0.6, duration: 0.8 }}
               className={styles.contactInfoText}
             >
-              +234 907 767 4030
+              +234 814 732 4415
             </motion.p>
           </motion.div>
         </div>

@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'; // Import Framer Motion
 import styles from '../styles/Home.module.css';
+import Link from 'next/link';
+
 
 const Hero = () => {
-  return (
+  return ( 
     <motion.section
       initial={{ opacity: 0, y: 50 }} // Initial state (hidden and slightly below)
       whileInView={{ opacity: 1, y: 0 }} // Animate to visible and in place
@@ -27,7 +29,10 @@ const Hero = () => {
         >
           Enjoy farm-fresh goodness, sustainably grown and harvested with love. From our fields to your table, experience the best nature has to offer.
         </motion.p>
+        <Link
+          href="/products">
         <motion.button
+        
           initial={{ opacity: 0, y: 20 }} // Initial state for the button
           whileInView={{ opacity: 1, y: 0 }} // Animate to visible
           transition={{ delay: 0.6, duration: 0.8 }} // Slight delay for staggered effect
@@ -35,6 +40,7 @@ const Hero = () => {
         >
           Shop Now
         </motion.button>
+        </Link>
       </div>
     </motion.section>
   );
