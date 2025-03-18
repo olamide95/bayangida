@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '../firebase'; // Import Firebase
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore'; // Add deleteDoc
 import {
   flexRender,
   getCoreRowModel,
@@ -12,6 +12,7 @@ import styles from '../styles/Dashboard.module.css'; // Import styles
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
+  const [roleFilter, setRoleFilter] = useState(''); // State for role filter
 
   // Fetch data from Firestore
   useEffect(() => {
@@ -27,8 +28,23 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  // Delete a document from Firestore
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'waitlist', id));
+      setData(data.filter((item) => item.id !== id)); // Remove the deleted item from state
+    } catch (error) {
+      console.error('Error deleting document: ', error);
+    }
+  };
+
   // Define columns
   const columns = [
+    {
+      accessorKey: 'id',
+      header: '#',
+      cell: ({ row }) => row.index + 1, // Add row numbering
+    },
     {
       accessorKey: 'name',
       header: 'Name',
@@ -49,11 +65,28 @@ const Dashboard = () => {
       accessorKey: 'role',
       header: 'Role',
     },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <button
+          onClick={() => handleDelete(row.original.id)} // Delete button
+          className={styles.deleteButton}
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
+
+  // Filter data based on role
+  const filteredData = roleFilter
+    ? data.filter((item) => item.role === roleFilter)
+    : data;
 
   // Create table instance
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -61,6 +94,24 @@ const Dashboard = () => {
   return (
     <div className={styles.dashboardContainer}>
       <h1 className={styles.dashboardTitle}>Waitlist Dashboard</h1>
+
+      {/* Role Filter Dropdown */}
+      <div className={styles.filterContainer}>
+        <label htmlFor="roleFilter">Filter by Role:</label>
+        <select
+          id="roleFilter"
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+          className={styles.filterSelect}
+        >
+          <option value="">All Roles</option>
+          <option value="consumer">Consumer</option>
+          <option value="logistics">Logistics Personnel</option>
+          <option value="farmer">Farmer</option>
+        </select>
+      </div>
+
+      {/* Table */}
       <table className={styles.table}>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
