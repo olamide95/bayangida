@@ -1,6 +1,6 @@
 'use client'; // Mark the component as a Client Component
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react'; // Add useMemo
 import { db } from '../firebase'; // Import Firebase
 import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore'; // Add deleteDoc
 import {
@@ -37,6 +37,12 @@ const Dashboard = () => {
       console.error('Error deleting document: ', error);
     }
   };
+
+  // Filter data based on role (using useMemo for optimization)
+  const filteredData = useMemo(() => {
+    if (!roleFilter) return data; // If no filter, return all data
+    return data.filter((item) => item.role === roleFilter);
+  }, [data, roleFilter]);
 
   // Define columns
   const columns = [
@@ -78,11 +84,6 @@ const Dashboard = () => {
       ),
     },
   ];
-
-  // Filter data based on role
-  const filteredData = roleFilter
-    ? data.filter((item) => item.role === roleFilter)
-    : data;
 
   // Create table instance
   const table = useReactTable({
