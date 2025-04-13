@@ -1,0 +1,252 @@
+.blogHeader {
+  position: relative;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.blogTitle {
+  font-family: "Cabinet Grotesk Variable", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.blogMeta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+}
+
+.metaIcon {
+  color: #0b7f40;
+}
+
+.blogContent {
+  padding: 3rem 0;
+}
+
+.content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.content h2 {
+  font-family: "Cabinet Grotesk Variable", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0d3c00;
+  margin: 2rem 0 1rem;
+}
+
+.content h3 {
+  font-family: "Cabinet Grotesk Variable", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0d3c00;
+  margin: 1.5rem 0 1rem;
+}
+
+.content p {
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.content ul,
+.content ol {
+  margin: 1rem 0 1.5rem 1.5rem;
+}
+
+.content li {
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.content a {
+  color: #0b7f40;
+  text-decoration: none;
+  border-bottom: 1px solid #0b7f40;
+  transition: color 0.3s ease;
+}
+
+.content a:hover {
+  color: #095c32;
+}
+
+.relatedPosts {
+  margin-top: 3rem;
+}
+
+.relatedPosts h3 {
+  font-family: "Cabinet Grotesk Variable", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0d3c00;
+  margin-bottom: 1.5rem;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+}
+
+.relatedCard {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.relatedCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.relatedCard h4 {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0d3c00;
+}
+
+/* Blog index page styles */
+.blogSubtitle {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  color: white;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.blogGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.blogCard {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blogCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.blogCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.blogCardImage {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.blogCardContent {
+  padding: 1.5rem;
+}
+
+.blogCardMeta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.blogCardTitle {
+  font-family: "Cabinet Grotesk Variable", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0d3c00;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.blogCardReadMore {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0b7f40;
+  display: inline-block;
+  padding-bottom: 2px;
+  border-bottom: 2px solid #0b7f40;
+}
+
+@media (min-width: 768px) {
+  .blogGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .relatedGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .blogGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .blogGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

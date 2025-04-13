@@ -163,7 +163,7 @@ const Contact = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className={styles.contactFormImage}
           >
-            <img src="/images/contactside.jpeg" alt="Contact Us" />
+            <img src="/images/contactside.jpg" alt="Contact Us" />
           </motion.div>
 
           {/* Right Side: Form */}

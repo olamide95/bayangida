@@ -545,4 +545,31 @@
     font-size: 21.54px; /* Restore size for tablet and desktop */
     line-height: 28px; /* Restore line height for tablet and desktop */
   }
+
+
+
+}
+.articleLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.articleLink:hover {
+  transform: translateY(-5px);
+}
+
+/* Update the articleGrid for 4 articles */
+@media (min-width: 768px) {
+  .articleGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .articleGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

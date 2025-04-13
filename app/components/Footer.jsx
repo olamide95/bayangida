@@ -1,5 +1,6 @@
-import Link from 'next/link';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import Link from "next/link"
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa"
+import styles from "../styles/StoreButtons.module.css"
 
 const Footer = () => {
   return (
@@ -16,26 +17,37 @@ const Footer = () => {
 
             {/* Description */}
             <p className="font-montserrat font-normal text-sm leading-7 mb-6">
-              We offer the widest range of agricultural products at the best prices while connecting farmers with millions of consumers across the globe through technology and commerce.
+              We offer the widest range of agricultural products at the best prices while connecting farmers with
+              millions of consumers across the globe through technology and commerce.
             </p>
 
             {/* Follow Us */}
-            <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-4">
-              Follow Us
-            </h3>
+            <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-4">Follow Us</h3>
 
             {/* Social Media Icons */}
             <div className="flex space-x-4">
               <a href="https://x.com/bayangidafarms?s=08" target="_blank" rel="noopener noreferrer">
                 <FaTwitter className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
-              <a href="https://www.facebook.com/profile.php?id=61559698063938&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://www.facebook.com/profile.php?id=61559698063938&mibextid=ZbWKwL"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FaFacebook className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
-              <a href="https://www.linkedin.com/company/bayangida-farms/posts/?feedView=all" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://www.linkedin.com/company/bayangida-farms/posts/?feedView=all"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FaLinkedinIn className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
-              <a href="https://www.instagram.com/bayangidafarms?igsh=dWVkNHJhOGxiZWRo" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://www.instagram.com/bayangidafarms?igsh=dWVkNHJhOGxiZWRo"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FaInstagram className="w-6 h-6 text-[#0B7F40] hover:text-[#095c32]" />
               </a>
             </div>
@@ -43,9 +55,7 @@ const Footer = () => {
 
           {/* Second Column: Quick Links */}
           <div>
-            <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-6">
-              Quick Links
-            </h3>
+            <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-6">Quick Links</h3>
             <ul className="space-y-4">
               <li>
                 <Link href="/about" className="font-montserrat font-normal text-sm leading-4 hover:text-green-300">
@@ -77,11 +87,11 @@ const Footer = () => {
             </h3>
             {/* App Download Links */}
             <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-              <Link href="/products">
-                <img src="/images/ios.png" alt="Download on iOS" className="w-[123px] h-[53px]" />
+              <Link href="/products" className={`${styles.storeButton} ${styles.appStoreButton}`}>
+                <img src="/images/android.png" alt="Download on App Store" />
               </Link>
-              <Link href="/products">
-                <img src="/images/android.png" alt="Download on Android" className="w-[123px] h-[53px]" />
+              <Link href="/products" className={`${styles.storeButton} ${styles.playStoreButton}`}>
+                <img src="/images/ios.png" alt="Get it on Google Play" />
               </Link>
             </div>
 
@@ -102,9 +112,7 @@ const Footer = () => {
 
           {/* Fourth Column: Newsletter */}
           <div>
-            <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-6">
-              Newsletter
-            </h3>
+            <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-6">Newsletter</h3>
             <input
               type="email"
               placeholder="Email"
@@ -124,7 +132,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

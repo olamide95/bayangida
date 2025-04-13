@@ -1,0 +1,27 @@
+.storeButton {
+    display: inline-block;
+    width: 143px;
+    height: 42px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .storeButton img {
+    width: auto;
+    height: 42px;
+    object-fit: fill;
+    object-position: left center;
+  }
+  
+  .appStoreButton img {
+    /* Specific styling for App Store button */
+    height: 42px;
+    width: auto;
+  }
+  
+  .playStoreButton img {
+    /* Specific styling for Play Store button */
+    height: 42px;
+    width: auto;
+  }
+  
