@@ -1,4 +1,4 @@
-import BlogIndex from "../../components/BlogIndex"
+import BlogIndex from "../components/BlogIndex"
 
 export const metadata = {
   title: "Blog | Bayangida Farms",
