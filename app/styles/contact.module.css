@@ -26,7 +26,6 @@
 }
 
 /* Contact Info Section */
-/* Contact Info Section */
 .contactInfoSection {
   width: 100%;
   padding: 40px 20px; /* Adjusted for mobile */
@@ -37,40 +36,41 @@
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  flex-direction: row; /* Default: cards in a row */
-  flex-wrap: wrap; /* Allow wrapping to the next line if needed */
-  gap: 20px; /* Reduced gap for mobile */
-  justify-content: center; /* Center cards when they wrap */
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .contactInfoCard {
-  width: calc(33.33% - 40px); /* Default: 3 cards in a row with gap */
-  height: auto; /* Auto height for flexibility */
+  width: calc(33.33% - 40px);
+  height: auto;
   background: #FFFFFF;
   border-radius: 25px;
   box-shadow: 0px 4px 35.4px rgba(128, 128, 128, 0.25);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px; /* Reduced padding for mobile */
+  padding: 20px;
+  box-sizing: border-box; /* Added to include padding in width calculation */
 }
 
 /* Responsive Design for Tablet and Desktop */
 @media (min-width: 768px) {
   .contactInfoCard {
-    width: calc(33.33% - 40px); /* 3 cards in a row with gap */
+    width: calc(33.33% - 40px);
   }
 }
 
 /* Responsive Design for Smaller Screens */
 @media (max-width: 767px) {
   .contactInfoCard {
-    width: 100%; /* Full width on smaller screens */
+    width: 100%;
   }
 }
 
 .iconCircle {
-  width: 80px; /* Smaller size for mobile */
+  width: 80px;
   height: 80px;
   background: #FFFFFF;
   border-radius: 50%;
@@ -78,36 +78,42 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 15px; /* Reduced margin for mobile */
+  margin-bottom: 15px;
 }
 
 .icon {
-  font-size: 30px; /* Smaller icon size for mobile */
+  font-size: 30px;
   color: #042E22;
 }
 
 .contactInfoTitle {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  font-size: 24px; /* Adjusted for mobile */
+  font-size: 24px;
   line-height: 36px;
   color: #042E22;
-  margin-bottom: 10px; /* Reduced margin for mobile */
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .contactInfoText {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
-  font-size: 18px; /* Adjusted for mobile */
+  font-size: 18px;
   line-height: 24px;
   color: #042E22;
   text-align: center;
+  padding: 0 10px; /* Added padding to prevent text overflow */
+  word-wrap: break-word; /* Ensure long words break properly */
+  overflow-wrap: break-word; /* Alternative property for word breaking */
+  width: 100%; /* Ensure it takes full width of container */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 /* Contact Form Section */
 .contactFormSection {
   width: 100%;
-  padding: 40px 20px; /* Adjusted for mobile */
+  padding: 40px 20px;
   background: #F6FEFC;
 }
 
@@ -115,96 +121,104 @@
   max-width: 1171px;
   margin: 0 auto;
   display: flex;
-  flex-direction: column; /* Stack image and form vertically on mobile */
-  gap: 20px; /* Reduced gap for mobile */
+  flex-direction: column;
+  gap: 20px;
 }
 
 .contactFormImage {
   flex: 1;
+  display: flex; /* Added for better control */
+  align-items: stretch; /* Make image container stretch to match height */
 }
 
 .contactFormImage img {
   width: 100%;
-  height: auto; /* Auto height for flexibility */
+  height: 100%; /* Changed to 100% to match container */
+  object-fit: cover; /* Ensure image covers the area while maintaining aspect ratio */
   border-radius: 10px;
 }
 
 .contactFormContent {
   flex: 2;
-  padding: 20px; /* Reduced padding for mobile */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .getInTouchText {
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
   font-style: italic;
-  font-size: 14px; /* Adjusted for mobile */
+  font-size: 14px;
   line-height: 20px;
   color: #009444;
-  margin-bottom: 10px; /* Reduced margin for mobile */
+  margin-bottom: 10px;
 }
 
 .sendMessageTitle {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  font-size: 24px; /* Adjusted for mobile */
+  font-size: 24px;
   line-height: 30px;
   color: #0D3C00;
-  margin-bottom: 20px; /* Reduced margin for mobile */
+  margin-bottom: 20px;
 }
 
 .contactForm {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Reduced gap for mobile */
+  gap: 15px;
+  flex-grow: 1; /* Make form take available space */
 }
 
 .formRow {
   display: flex;
-  flex-direction: column; /* Stack inputs vertically on mobile */
-  gap: 15px; /* Reduced gap for mobile */
+  flex-direction: column;
+  gap: 15px;
 }
 
 .formRow input,
 .contactForm input,
 .contactForm textarea {
   width: 100%;
-  padding: 10px; /* Reduced padding for mobile */
+  padding: 10px;
   border-radius: 10px;
   border: 0.81px solid #0B7F40;
   background: rgba(158, 248, 74, 0.1);
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
   font-style: italic;
-  font-size: 12px; /* Adjusted for mobile */
+  font-size: 12px;
   color: #6A6A6A;
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .contactForm textarea {
-  height: 150px; /* Reduced height for mobile */
+  height: 150px;
   resize: none;
 }
 
 .submitButton {
-  width: 100%; /* Full width on mobile */
-  height: 50px; /* Reduced height for mobile */
+  width: 100%;
+  height: 50px;
   background: #009444;
   border-radius: 60px;
   border: none;
   color: white;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
-  font-size: 14px; /* Adjusted for mobile */
+  font-size: 14px;
   line-height: 20px;
   text-transform: uppercase;
   cursor: pointer;
+  margin-top: auto; /* Push button to bottom if there's extra space */
 }
 
 /* Map Section */
 .mapSection {
   width: 100%;
-  height: 300px; /* Reduced height for mobile */
-  margin-top: 40px; /* Reduced margin for mobile */
+  height: 300px;
+  margin-top: 40px;
 }
 
 .mapSection iframe {
@@ -217,95 +231,97 @@
 @media (min-width: 768px) {
   /* Hero Section */
   .hero {
-    height: 507px; /* Restore height for tablet and desktop */
+    height: 507px;
   }
 
   .heroTitle {
-    font-size: 96px; /* Restore size for tablet and desktop */
+    font-size: 96px;
   }
 
   /* Contact Info Section */
   .contactInfoSection {
-    padding: 80px 20px; /* Restore padding for tablet and desktop */
+    padding: 80px 20px;
   }
 
   .contactInfoContainer {
-    flex-direction: row; /* Display cards in a row for tablet and desktop */
-    gap: 40px; /* Restore gap for tablet and desktop */
+    gap: 40px;
   }
 
   .contactInfoCard {
-    width: 370px; /* Restore width for tablet and desktop */
-    height: 362px; /* Restore height for tablet and desktop */
-    padding: 40px 20px; /* Restore padding for tablet and desktop */
+    width: 370px;
+    height: 362px;
+    padding: 40px 20px;
   }
 
   .iconCircle {
-    width: 100px; /* Restore size for tablet and desktop */
+    width: 100px;
     height: 100px;
   }
 
   .icon {
-    font-size: 40px; /* Restore size for tablet and desktop */
+    font-size: 40px;
   }
 
   .contactInfoTitle {
-    font-size: 30px; /* Restore size for tablet and desktop */
+    font-size: 30px;
   }
 
   .contactInfoText {
-    font-size: 22px; /* Restore size for tablet and desktop */
+    font-size: 22px;
+    padding: 0 20px; /* Increased padding for larger screens */
   }
 
   /* Contact Form Section */
   .contactFormSection {
-    padding: 80px 20px; /* Restore padding for tablet and desktop */
+    padding: 80px 20px;
   }
 
   .contactFormContainer {
-    flex-direction: row; /* Display image and form side by side for tablet and desktop */
-    gap: 40px; /* Restore gap for tablet and desktop */
+    flex-direction: row;
+    gap: 40px;
+    align-items: stretch; /* Make both sides same height */
   }
 
   .contactFormImage img {
-    height: 682.75px; /* Restore height for tablet and desktop */
+    height: 95%; /* Maintain 100% height */
   }
 
   .contactFormContent {
-    padding: 40px; /* Restore padding for tablet and desktop */
+    padding: 40px;
   }
 
   .getInTouchText {
-    font-size: 14.64px; /* Restore size for tablet and desktop */
+    font-size: 14.64px;
   }
 
   .sendMessageTitle {
-    font-size: 39.03px; /* Restore size for tablet and desktop */
+    font-size: 39.03px;
   }
 
   .formRow {
-    flex-direction: row; /* Display inputs side by side for tablet and desktop */
+    flex-direction: row;
   }
 
   .formRow input,
   .contactForm input,
   .contactForm textarea {
-    font-size: 11.38px; /* Restore size for tablet and desktop */
+    font-size: 11.38px;
   }
 
   .contactForm textarea {
-    height: 187.65px; /* Restore height for tablet and desktop */
+    height: 187.65px;
   }
 
   .submitButton {
-    width: 145.82px; /* Restore width for tablet and desktop */
-    height: 60.41px; /* Restore height for tablet and desktop */
-    font-size: 11.38px; /* Restore size for tablet and desktop */
+    width: 145.82px;
+    height: 60.41px;
+    font-size: 11.38px;
+    margin-top: 0; /* Reset margin for desktop */
   }
 
   /* Map Section */
   .mapSection {
-    height: 468px; /* Restore height for tablet and desktop */
-    margin-top: 80px; /* Restore margin for tablet and desktop */
+    height: 468px;
+    margin-top: 80px;
   }
 }

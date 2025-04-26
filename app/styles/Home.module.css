@@ -1,4 +1,58 @@
-/* Global Styles */
+
+/* Add this at the very top of your CSS */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Update the article card styles */
+.articleCard {
+  width: 100%; /* Changed from fixed width */
+  max-width: 100%; /* Ensure it never exceeds container */
+  height: auto;
+  border-radius: 14.92px;
+  padding: 13.46px;
+  box-shadow: 0px 3.98px 18.99px 0px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  box-sizing: border-box; /* Add this to include padding in width */
+}
+
+/* Remove any fixed widths in mobile view */
+@media (max-width: 767px) {
+  .hero {
+    padding-left: 20px;
+    padding-right: 20px; /* Add matching right padding */
+  }
+  
+  .about, 
+  .waitlistWrapper,
+  .latestNews {
+    padding-left: 20px;
+    padding-right: 20px; /* Ensure symmetrical padding */
+  }
+  
+  /* Ensure all containers properly contain their children */
+  .container {
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+}
+
+/* Remove duplicate media queries at the bottom of your CSS */
+/* DELETE THESE:
+@media (min-width: 768px) {
+  .articleGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .articleGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+*//* Global Styles */
 .container {
   font-family: 'Poppins', sans-serif;
   max-width: 1440px; /* Set a max-width for the entire page */
@@ -532,21 +586,36 @@
     line-height: 86px; /* Restore line height for tablet and desktop */
   }
 
-  .articleGrid {
-    grid-template-columns: repeat(3, 1fr); /* Three columns for tablet and desktop */
-  }
+ /* Latest News Section Styles */
+.articleGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* Single column on mobile */
+  gap: 24px;
+}
 
-  .articleCard {
-    width: 359px; /* Restore width for tablet and desktop */
-    height: 389px; /* Restore height for tablet and desktop */
+/* Responsive Design for Tablet */
+@media (min-width: 768px) {
+  .articleGrid {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on tablet */
   }
+}
+
+/* Responsive Design for Desktop */
+@media (min-width: 1024px) {
+  .articleGrid {
+    grid-template-columns: repeat(3, 1fr); /* Three columns on desktop */
+  }
+  
+  .articleCard {
+    width: 100%; /* Let the grid handle the width */
+    max-width: 100%; /* Ensure it doesn't exceed container */
+  }
+}
 
   .articleTitle {
     font-size: 21.54px; /* Restore size for tablet and desktop */
     line-height: 28px; /* Restore line height for tablet and desktop */
   }
-
-
 
 }
 .articleLink {

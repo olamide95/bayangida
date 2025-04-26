@@ -37,6 +37,8 @@
   list-style-type: disc;
   padding-left: 20px;
   margin-bottom: 20px;
+  text-align: left; /* Align list items to the left */
+  align-self: flex-start; 
 }
 
 .writeUpList li {
