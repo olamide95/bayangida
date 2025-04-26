@@ -141,7 +141,7 @@ const Footer = () => {
               Get the Bayangida Mobile App
             </h3>
             {/* App Download Links */}
-            <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+            <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 space-x-0">
               <Link href="/products" className={`${styles.storeButton} ${styles.appStoreButton}`}>
                 <img src="/images/android.png" alt="Download on App Store" />
               </Link>
@@ -153,12 +153,12 @@ const Footer = () => {
             {/* Sign In Buttons */}
             <div className="flex flex-col space-y-4 mt-4">
               <Link href="/products">
-                <button className="w-full md:w-[240px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
+                <button className="w-full md:w-[260px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
                   Sign In as a Farmer
                 </button>
               </Link>
               <Link href="/products">
-                <button className="w-full md:w-[240px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
+                <button className="w-full md:w-[260px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
                   Sign In as Logistics Provider
                 </button>
               </Link>

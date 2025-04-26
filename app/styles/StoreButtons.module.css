@@ -1,27 +1,36 @@
 .storeButton {
-    display: inline-block;
-    width: 123px;
-    height: 42px;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .storeButton img {
-    width: auto;
-    height: 42px;
-    object-fit: fill;
-    object-position: left center;
-  }
-  
-  .appStoreButton img {
-    /* Specific styling for App Store button */
-    height: 42px;
-    width: auto;
-  }
-  
-  .playStoreButton img {
-    /* Specific styling for Play Store button */
-    height: 42px;
-    width: auto;
-  }
-  
+  display: inline-block;
+  width: 123px;
+  height: 42px;
+  position: relative;
+  overflow: hidden;
+  background-color: black;
+  border-radius: 8px; /* Added rounded edges - adjust this value as needed */
+  padding: 3px; /* Slightly increased padding for better visual appearance */
+  box-sizing: border-box;
+  transition: all 0.2s ease; /* Smooth hover effect */
+}
+
+/* Optional hover effect - remove if not needed */
+.storeButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.storeButton img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  border-radius: 5px; /* Slightly less than container for inner border effect */
+}
+
+/* If you want different radius for different buttons */
+.appStoreButton {
+  border-radius: 10px; /* More rounded for App Store */
+}
+
+.playStoreButton {
+  border-radius: 10px; /* Less rounded for Play Store */
+}
