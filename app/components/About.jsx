@@ -30,6 +30,7 @@ const About = () => {
           At Bayangida, our goal is to build an online-based platform that provides easy access for consumers to order and receive any agricultural product swiftly and at cheaper rates. We offer a mobile app and web-based platform that serves as an online farm market, providing online payment, delivery, and logistics services, connecting farmers to millions of consumers.
         </p>
         <motion.button
+        href="/products" // Link to the signup page
           initial={{ opacity: 0, y: 20 }} // Initial state for the button
           whileInView={{ opacity: 1, y: 0 }} // Animate to visible
           transition={{ delay: 0.6, duration: 0.8 }} // Slight delay for staggered effect
