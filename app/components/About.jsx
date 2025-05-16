@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'; // Import Framer Motion
 import styles from '../styles/Home.module.css';
+import Link from 'next/link';
 
 const About = () => {
   return (
