@@ -204,3 +204,46 @@
   background-color: #cccccc;
   cursor: not-allowed;
 }
+.controlButtons {
+  margin-bottom: 20px;
+}
+
+.bulkAddButton {
+  background-color: #673AB7;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.bulkAddButton:hover {
+  background-color: #5E35B1;
+}
+
+/* Edit button */
+.editButton {
+  background-color: #FF9800;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.editButton:hover {
+  background-color: #F57C00;
+}
+
+/* Additional dialog styles */
+.dialog p {
+  margin-bottom: 15px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.dialog strong {
+  color: #333;
+}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { db } from '../firebase';
-import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, setDoc, updateDoc } from 'firebase/firestore';
 import {
   flexRender,
   getCoreRowModel,
@@ -14,26 +14,39 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [roleFilter, setRoleFilter] = useState('');
   const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showBulkAddDialog, setShowBulkAddDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   const [emailData, setEmailData] = useState({
     subject: '',
     content: '',
-    recipient: null, // null for group email, object for individual
+    recipient: null,
+  });
+  const [bulkAddData, setBulkAddData] = useState('');
+  const [currentEditUser, setCurrentEditUser] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    location: '',
+    role: '',
   });
   const [isSending, setIsSending] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Fetch data from Firestore
   useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, 'waitlist'));
-      const waitlistData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setData(waitlistData);
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    const querySnapshot = await getDocs(collection(db, 'waitlist'));
+    const waitlistData = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setData(waitlistData);
+  };
 
   // Delete a document from Firestore
   const handleDelete = async (id) => {
@@ -45,22 +58,122 @@ const Dashboard = () => {
     }
   };
 
-  // Open email dialog for individual or group email
+  // Open edit dialog
+  const openEditDialog = (user) => {
+    setCurrentEditUser(user);
+    setEditFormData({
+      name: user.name || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      location: user.location || '',
+      role: user.role || '',
+    });
+    setShowEditDialog(true);
+  };
+
+  // Handle edit form changes
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Update user details
+  const updateUser = async () => {
+    if (!editFormData.name || !editFormData.email || !editFormData.role) {
+      alert('Name, Email, and Role are required');
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
+      await updateDoc(doc(db, 'waitlist', currentEditUser.id), editFormData);
+      await fetchData(); // Refresh data
+      setShowEditDialog(false);
+    } catch (error) {
+      console.error('Error updating document: ', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Bulk add users
+  const handleBulkAdd = async () => {
+    if (!bulkAddData.trim()) {
+      alert('Please enter user data');
+      return;
+    }
+
+    setIsAdding(true);
+    try {
+      const lines = bulkAddData.trim().split('\n');
+      const existingEmails = new Set(data.map(user => user.email.toLowerCase()));
+      const usersToAdd = [];
+      const duplicateEmails = [];
+
+      // Parse each line
+      for (const line of lines) {
+        const parts = line.split(',').map(part => part.trim());
+        if (parts.length < 3) continue; // Skip invalid lines (need at least name, email, role)
+
+        const [name, email, role, phone = '', location = ''] = parts;
+        const emailLower = email.toLowerCase();
+
+        if (existingEmails.has(emailLower)) {
+          duplicateEmails.push(email);
+          continue;
+        }
+
+        usersToAdd.push({
+          name,
+          email,
+          phone,
+          location,
+          role,
+          createdAt: new Date().toISOString()
+        });
+        existingEmails.add(emailLower);
+      }
+
+      // Add users to Firestore
+      for (const user of usersToAdd) {
+        const docRef = doc(collection(db, 'waitlist'));
+        await setDoc(docRef, user);
+      }
+
+      if (duplicateEmails.length > 0) {
+        alert(`Added ${usersToAdd.length} users. Skipped ${duplicateEmails.length} duplicates: ${duplicateEmails.join(', ')}`);
+      } else {
+        alert(`Successfully added ${usersToAdd.length} users`);
+      }
+
+      await fetchData(); // Refresh data
+      setBulkAddData('');
+      setShowBulkAddDialog(false);
+    } catch (error) {
+      console.error('Error adding users: ', error);
+      alert('Failed to add users');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  // Email functions (same as before)
   const openEmailDialog = (recipient) => {
     setEmailData({
       subject: '',
       content: '',
-      recipient: recipient, // null for group, user object for individual
+      recipient: recipient,
     });
     setShowEmailDialog(true);
   };
 
-  // Close email dialog
   const closeEmailDialog = () => {
     setShowEmailDialog(false);
   };
 
-  // Handle email input changes
   const handleEmailInputChange = (e) => {
     const { name, value } = e.target;
     setEmailData(prev => ({
@@ -69,7 +182,6 @@ const Dashboard = () => {
     }));
   };
 
-  // Send email function
   const sendEmail = async () => {
     if (!emailData.subject || !emailData.content) {
       alert('Please fill in both subject and content');
@@ -81,18 +193,14 @@ const Dashboard = () => {
     try {
       let recipients = [];
       
-      // Determine recipients
       if (emailData.recipient) {
-        // Individual email
         recipients = [emailData.recipient];
       } else {
-        // Group email based on filter
         recipients = roleFilter ? 
           data.filter(item => item.role === roleFilter) : 
           data;
       }
 
-      // Send to each recipient
       for (const recipient of recipients) {
         await sendSingleEmail(recipient.email, recipient.name, emailData.subject, emailData.content);
       }
@@ -107,7 +215,6 @@ const Dashboard = () => {
     }
   };
 
-  // Function to send single email
   const sendSingleEmail = async (email, name, subject, content) => {
     const response = await fetch('/api/sendcustomemail', {
       method: 'POST',
@@ -174,6 +281,12 @@ const Dashboard = () => {
             Send
           </button>
           <button
+            onClick={() => openEditDialog(row.original)}
+            className={styles.editButton}
+          >
+            Edit
+          </button>
+          <button
             onClick={() => handleDelete(row.original.id)}
             className={styles.deleteButton}
           >
@@ -194,6 +307,16 @@ const Dashboard = () => {
   return (
     <div className={styles.dashboardContainer}>
       <h1 className={styles.dashboardTitle}>Waitlist Dashboard</h1>
+
+      {/* Control Buttons */}
+      <div className={styles.controlButtons}>
+        <button
+          onClick={() => setShowBulkAddDialog(true)}
+          className={styles.bulkAddButton}
+        >
+          Bulk Add Users
+        </button>
+      </div>
 
       {/* Role Filter Dropdown */}
       <div className={styles.filterContainer}>
@@ -296,6 +419,133 @@ const Dashboard = () => {
                 disabled={isSending}
               >
                 {isSending ? 'Sending...' : 'Send Email'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Add Dialog */}
+      {showBulkAddDialog && (
+        <div className={styles.dialogOverlay}>
+          <div className={styles.dialog}>
+            <h2>Bulk Add Users</h2>
+            <p>
+              Enter user data in CSV format (one user per line):<br />
+              <strong>Format:</strong> Name, Email, Role, [Phone], [Location]<br />
+              <strong>Example:</strong> John Doe, john@example.com, consumer, 1234567890, Lagos
+            </p>
+            
+            <div className={styles.dialogInputGroup}>
+              <textarea
+                value={bulkAddData}
+                onChange={(e) => setBulkAddData(e.target.value)}
+                className={styles.dialogTextarea}
+                rows={10}
+                placeholder={`John Doe, john@example.com, consumer, 1234567890, Lagos\nJane Smith, jane@example.com, farmer, 0987654321, Abuja\n...`}
+              />
+            </div>
+            
+            <div className={styles.dialogButtons}>
+              <button 
+                onClick={() => setShowBulkAddDialog(false)}
+                className={styles.dialogCancel}
+                disabled={isAdding}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBulkAdd}
+                className={styles.dialogSend}
+                disabled={isAdding}
+              >
+                {isAdding ? 'Adding...' : 'Add Users'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit User Dialog */}
+      {showEditDialog && currentEditUser && (
+        <div className={styles.dialogOverlay}>
+          <div className={styles.dialog}>
+            <h2>Edit User: {currentEditUser.name}</h2>
+            
+            <div className={styles.dialogInputGroup}>
+              <label>Name:</label>
+              <input
+                type="text"
+                name="name"
+                value={editFormData.name}
+                onChange={handleEditChange}
+                className={styles.dialogInput}
+              />
+            </div>
+            
+            <div className={styles.dialogInputGroup}>
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                value={editFormData.email}
+                onChange={handleEditChange}
+                className={styles.dialogInput}
+                disabled
+              />
+            </div>
+            
+            <div className={styles.dialogInputGroup}>
+              <label>Phone:</label>
+              <input
+                type="text"
+                name="phone"
+                value={editFormData.phone}
+                onChange={handleEditChange}
+                className={styles.dialogInput}
+              />
+            </div>
+            
+            <div className={styles.dialogInputGroup}>
+              <label>Location:</label>
+              <input
+                type="text"
+                name="location"
+                value={editFormData.location}
+                onChange={handleEditChange}
+                className={styles.dialogInput}
+              />
+            </div>
+            
+            <div className={styles.dialogInputGroup}>
+              <label>Role:</label>
+              <select
+                name="role"
+                value={editFormData.role}
+                onChange={handleEditChange}
+                className={styles.dialogInput}
+              >
+                <option value="">Select Role</option>
+                <option value="consumer">Consumer</option>
+                <option value="logistics">Logistics Personnel</option>
+                <option value="farmer">Farmer</option>
+              </select>
+            </div>
+            
+            <div className={styles.dialogButtons}>
+              <button 
+                onClick={() => setShowEditDialog(false)}
+                className={styles.dialogCancel}
+                disabled={isUpdating}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={updateUser}
+                className={styles.dialogSend}
+                disabled={isUpdating}
+              >
+                {isUpdating ? 'Updating...' : 'Update User'}
               </button>
             </div>
           </div>
