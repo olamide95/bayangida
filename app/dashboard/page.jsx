@@ -33,6 +33,8 @@ const Dashboard = () => {
   const [isSending, setIsSending] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('newest'); // 'newest' or 'oldest'
 
   // Fetch data from Firestore
   useEffect(() => {
@@ -160,7 +162,7 @@ const Dashboard = () => {
     }
   };
 
-  // Email functions (same as before)
+  // Email functions
   const openEmailDialog = (recipient) => {
     setEmailData({
       subject: '',
@@ -236,11 +238,36 @@ const Dashboard = () => {
     return response.json();
   };
 
-  // Filter data based on role
+  // Filter and sort data
   const filteredData = useMemo(() => {
-    if (!roleFilter) return data;
-    return data.filter((item) => item.role === roleFilter);
-  }, [data, roleFilter]);
+    let result = [...data];
+    
+    // Apply role filter
+    if (roleFilter) {
+      result = result.filter((item) => item.role === roleFilter);
+    }
+    
+    // Apply search filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter((item) => 
+        item.name?.toLowerCase().includes(term) ||
+        item.email?.toLowerCase().includes(term) ||
+        item.phone?.toLowerCase().includes(term) ||
+        item.location?.toLowerCase().includes(term) ||
+        item.role?.toLowerCase().includes(term)
+      );
+    }
+    
+    // Apply sorting
+    result.sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0);
+      const dateB = new Date(b.createdAt || 0);
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+    
+    return result;
+  }, [data, roleFilter, searchTerm, sortOrder]);
 
   // Define columns
   const columns = [
@@ -268,6 +295,14 @@ const Dashboard = () => {
     {
       accessorKey: 'role',
       header: 'Role',
+    },
+    {
+      accessorKey: 'createdAt',
+      header: 'Sign-up Date',
+      cell: ({ row }) => {
+        const date = row.original.createdAt ? new Date(row.original.createdAt) : null;
+        return date ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : 'N/A';
+      },
     },
     {
       id: 'actions',
@@ -318,20 +353,48 @@ const Dashboard = () => {
         </button>
       </div>
 
-      {/* Role Filter Dropdown */}
+      {/* Filters and Search */}
       <div className={styles.filterContainer}>
-        <label htmlFor="roleFilter">Filter by Role:</label>
-        <select
-          id="roleFilter"
-          value={roleFilter}
-          onChange={(e) => setRoleFilter(e.target.value)}
-          className={styles.filterSelect}
-        >
-          <option value="">All Roles</option>
-          <option value="consumer">Consumer</option>
-          <option value="logistics">Logistics Personnel</option>
-          <option value="farmer">Farmer</option>
-        </select>
+        {/* Search Input */}
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Search users..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+
+        {/* Role Filter */}
+        <div className={styles.filterGroup}>
+          <label htmlFor="roleFilter">Filter by Role:</label>
+          <select
+            id="roleFilter"
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            className={styles.filterSelect}
+          >
+            <option value="">All Roles</option>
+            <option value="consumer">Consumer</option>
+            <option value="logistics">Logistics Personnel</option>
+            <option value="farmer">Farmer</option>
+          </select>
+        </div>
+
+        {/* Sort Order */}
+        <div className={styles.filterGroup}>
+          <label htmlFor="sortOrder">Sort by Date:</label>
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className={styles.filterSelect}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
         
         {/* Group Send Button */}
         <button
@@ -344,33 +407,43 @@ const Dashboard = () => {
       </div>
 
       {/* Table */}
-      <table className={styles.table}>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} className={styles.th}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className={styles.tr}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className={styles.td}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id} className={styles.th}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className={styles.tr}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className={styles.td}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={columns.length} className={styles.noData}>
+                  No users found matching your criteria
                 </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Email Dialog */}
       {showEmailDialog && (
