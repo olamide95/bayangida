@@ -10,42 +10,44 @@ const Waitlist = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
+ const handleSubmit = async (e) => {
+     e.preventDefault();
+     setIsSubmitting(true);
+   
      const formData = new FormData(e.target);
-        const data = {
-          name: formData.get('name'),
-          phone: formData.get('phone'),
-          email: formData.get('email'),
-          location: formData.get('location'),
-          role: formData.get('role'),
-          createdAt: serverTimestamp(), // Add server timestamp
-        };
-
-    try {
-      const docRef = await addDoc(collection(db, 'waitlist'), data);
-      console.log('Document written with ID: ', docRef.id);
-
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: data.email, name: data.name }),
-      });
-
-      if (response.ok) {
-        setIsSuccess(true);
-      } else {
-        alert('Failed to send email. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+     const data = {
+       name: formData.get('name'),
+       phone: formData.get('phone'),
+       email: formData.get('email'),
+       location: formData.get('location'),
+       role: formData.get('role'),
+       createdAt: serverTimestamp(), // Add server timestamp
+     };
+   
+     try {
+       // Save data to Firestore
+       const docRef = await addDoc(collection(db, 'waitlist'), data);
+       console.log('Document written with ID: ', docRef.id);
+   
+       // Send email via API route
+       const response = await fetch('/api/send-email', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ email: data.email, name: data.name }),
+       });
+   
+       if (response.ok) {
+         setIsSuccess(true);
+       } else {
+         alert('Failed to send email. Please try again.');
+       }
+     } catch (error) {
+       console.error('Error:', error);
+       alert('An error occurred. Please try again.');
+     } finally {
+       setIsSubmitting(false);
+     }
+   };
 
   return (
     <motion.div
