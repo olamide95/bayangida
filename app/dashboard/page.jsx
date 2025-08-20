@@ -49,32 +49,35 @@ const Dashboard = () => {
     const waitlistData = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       
-      // Convert Firestore timestamp to JS Date object for proper sorting
+      // Handle Firestore timestamp
       let createdAt = null;
+      let timestampValue = 0;
+      
       if (data.createdAt) {
         // Check if it's a Firestore timestamp
         if (typeof data.createdAt.toDate === 'function') {
           createdAt = data.createdAt.toDate();
+          timestampValue = createdAt.getTime();
         } else if (data.createdAt.seconds) {
           // Handle timestamp object with seconds property
           createdAt = new Date(data.createdAt.seconds * 1000);
+          timestampValue = createdAt.getTime();
         } else if (typeof data.createdAt === 'string') {
           // Handle ISO string
           createdAt = new Date(data.createdAt);
+          timestampValue = createdAt.getTime();
         } else {
-          // Fallback to current date if no valid timestamp
-          createdAt = new Date();
+          // If we can't parse the date, set to null
+          createdAt = null;
+          timestampValue = 0;
         }
-      } else {
-        // If no createdAt field, use current date
-        createdAt = new Date();
       }
       
       return {
         id: doc.id,
         ...data,
-        createdAt: createdAt.toISOString(), // Convert to ISO string for consistent storage
-        timestamp: createdAt.getTime() // Add numeric timestamp for easier sorting
+        createdAt: createdAt, // Store as Date object
+        timestamp: timestampValue, // Add numeric timestamp for easier sorting
       };
     });
     
@@ -183,7 +186,7 @@ const Dashboard = () => {
           phone,
           location,
           role,
-          createdAt: new Date().toISOString(),
+          createdAt: new Date(),
           timestamp: Date.now()
         });
         existingEmails.add(emailLower);
@@ -318,18 +321,18 @@ const Dashboard = () => {
           : b.timestamp - a.timestamp;
       }
       
-      // For other fields
-      let aValue = a[sortConfig.key] || '';
-      let bValue = b[sortConfig.key] || '';
-      
-      // Handle date strings specifically
+      // For createdAt field (date comparison)
       if (sortConfig.key === 'createdAt') {
-        aValue = a.timestamp || 0;
-        bValue = b.timestamp || 0;
+        const aValue = a.timestamp || 0;
+        const bValue = b.timestamp || 0;
         return sortConfig.direction === 'asc' 
           ? aValue - bValue 
           : bValue - aValue;
       }
+      
+      // For other fields
+      let aValue = a[sortConfig.key] || '';
+      let bValue = b[sortConfig.key] || '';
       
       // Convert to string for comparison
       if (typeof aValue === 'string') aValue = aValue.toLowerCase();
@@ -346,6 +349,21 @@ const Dashboard = () => {
     
     return result;
   }, [data, roleFilter, searchTerm, sortConfig]);
+
+  // Format date for display
+  const formatDate = (date) => {
+    if (!date) return 'Not acknowledged';
+    
+    try {
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return 'Invalid date';
+    }
+  };
 
   // Define columns
   const columns = [
@@ -420,8 +438,7 @@ const Dashboard = () => {
         </span>
       ),
       cell: ({ row }) => {
-        const date = row.original.createdAt ? new Date(row.original.createdAt) : null;
-        return date ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : 'N/A';
+        return formatDate(row.original.createdAt);
       },
     },
     {
