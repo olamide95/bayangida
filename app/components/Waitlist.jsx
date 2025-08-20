@@ -4,8 +4,9 @@ import { motion } from 'framer-motion'; // Import Framer Motion
 import styles from '../styles/Waitlist.module.css';
 import Image from 'next/image'; // Import Next.js Image component
 import { db } from '../firebase.js'; // Import Firebase
-import { collection, addDoc } from 'firebase/firestore'; // Firestore functions
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'; // Firestore functions
 import { useState } from 'react'; // Import useState for dialog state
+
 const Waitlist = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
   const [isSuccess, setIsSuccess] = useState(false); // Success state
@@ -22,6 +23,7 @@ const Waitlist = () => {
       email: formData.get('email'),
       location: formData.get('location'),
       role: formData.get('role'),
+      createdAt: serverTimestamp(), // Add server timestamp
     };
   
     try {
