@@ -14,14 +14,15 @@ const Waitlist = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const formData = new FormData(e.target);
-    const data = {
-      name: formData.get('name'),
-      phone: formData.get('phone'),
-      email: formData.get('email'),
-      location: formData.get('location'),
-      role: formData.get('role'),
-    };
+     const formData = new FormData(e.target);
+        const data = {
+          name: formData.get('name'),
+          phone: formData.get('phone'),
+          email: formData.get('email'),
+          location: formData.get('location'),
+          role: formData.get('role'),
+          createdAt: serverTimestamp(), // Add server timestamp
+        };
 
     try {
       const docRef = await addDoc(collection(db, 'waitlist'), data);
