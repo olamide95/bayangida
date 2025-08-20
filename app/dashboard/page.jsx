@@ -44,48 +44,46 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'waitlist'));
-    const waitlistData = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      
-      // Handle Firestore timestamp
-      let createdAt = null;
-      let timestampValue = 0;
-      
-      if (data.createdAt) {
-        // Check if it's a Firestore timestamp
-        if (typeof data.createdAt.toDate === 'function') {
-          createdAt = data.createdAt.toDate();
-          timestampValue = createdAt.getTime();
-        } else if (data.createdAt.seconds) {
-          // Handle timestamp object with seconds property
-          createdAt = new Date(data.createdAt.seconds * 1000);
-          timestampValue = createdAt.getTime();
-        } else if (typeof data.createdAt === 'string') {
-          // Handle ISO string
-          createdAt = new Date(data.createdAt);
-          timestampValue = createdAt.getTime();
-        } else {
-          // If we can't parse the date, set to null
-          createdAt = null;
-          timestampValue = 0;
-        }
+ const fetchData = async () => {
+  const querySnapshot = await getDocs(collection(db, 'waitlist'));
+  const waitlistData = querySnapshot.docs.map((doc) => {
+    const data = doc.data();
+    
+    // Handle Firestore timestamp
+    let createdAt = null;
+    let timestampValue = 0;
+    
+    if (data.createdAt) {
+      // Check if it's a Firestore timestamp
+      if (typeof data.createdAt.toDate === 'function') {
+        createdAt = data.createdAt.toDate();
+        timestampValue = createdAt.getTime();
+      } else if (data.createdAt.seconds) {
+        // Handle timestamp object with seconds property
+        createdAt = new Date(data.createdAt.seconds * 1000);
+        timestampValue = createdAt.getTime();
+      } else if (typeof data.createdAt === 'string') {
+        // Handle ISO string
+        createdAt = new Date(data.createdAt);
+        timestampValue = createdAt.getTime();
       }
-      
-      return {
-        id: doc.id,
-        ...data,
-        createdAt: createdAt, // Store as Date object
-        timestamp: timestampValue, // Add numeric timestamp for easier sorting
-      };
-    });
+      // If we can't parse the date, it will remain null
+    }
     
-    // Sort by timestamp (newest first) immediately after fetching
-    waitlistData.sort((a, b) => b.timestamp - a.timestamp);
-    
-    setData(waitlistData);
-  };
+    return {
+      id: doc.id,
+      ...data,
+      createdAt: createdAt, // Store as Date object
+      timestamp: timestampValue, // Add numeric timestamp for easier sorting
+    };
+  });
+  
+  // Sort by timestamp (newest first) immediately after fetching
+  waitlistData.sort((a, b) => b.timestamp - a.timestamp);
+  
+  setData(waitlistData);
+};
+
 
   // Handle column sorting
   const handleSort = (key) => {
@@ -292,78 +290,80 @@ const Dashboard = () => {
   };
 
   // Filter and sort data
-  const filteredData = useMemo(() => {
-    let result = [...data];
-    
-    // Apply role filter
-    if (roleFilter) {
-      result = result.filter((item) => item.role === roleFilter);
+ const filteredData = useMemo(() => {
+  let result = [...data];
+  
+  // Apply role filter
+  if (roleFilter) {
+    result = result.filter((item) => item.role === roleFilter);
+  }
+  
+  // Apply search filter
+  if (searchTerm) {
+    const term = searchTerm.toLowerCase();
+    result = result.filter((item) => 
+      item.name?.toLowerCase().includes(term) ||
+      item.email?.toLowerCase().includes(term) ||
+      item.phone?.toLowerCase().includes(term) ||
+      item.location?.toLowerCase().includes(term) ||
+      item.role?.toLowerCase().includes(term)
+    );
+  }
+  
+  // Apply sorting
+  result.sort((a, b) => {
+    // For timestamp field (numeric)
+    if (sortConfig.key === 'timestamp' || sortConfig.key === 'createdAt') {
+      // Records without timestamps should go to the end
+      const aValue = a.timestamp || 0;
+      const bValue = b.timestamp || 0;
+      
+      // If both have no timestamp, keep original order
+      if (aValue === 0 && bValue === 0) return 0;
+      
+      // If one has no timestamp, it should go to the end
+      if (aValue === 0) return 1;
+      if (bValue === 0) return -1;
+      
+      // Both have timestamps, sort normally
+      return sortConfig.direction === 'asc' 
+        ? aValue - bValue 
+        : bValue - aValue;
     }
     
-    // Apply search filter
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      result = result.filter((item) => 
-        item.name?.toLowerCase().includes(term) ||
-        item.email?.toLowerCase().includes(term) ||
-        item.phone?.toLowerCase().includes(term) ||
-        item.location?.toLowerCase().includes(term) ||
-        item.role?.toLowerCase().includes(term)
-      );
+    // For other fields
+    let aValue = a[sortConfig.key] || '';
+    let bValue = b[sortConfig.key] || '';
+    
+    // Convert to string for comparison
+    if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+    if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+    
+    if (aValue < bValue) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
     }
-    
-    // Apply sorting
-    result.sort((a, b) => {
-      // For timestamp field (numeric)
-      if (sortConfig.key === 'timestamp') {
-        return sortConfig.direction === 'asc' 
-          ? a.timestamp - b.timestamp 
-          : b.timestamp - a.timestamp;
-      }
-      
-      // For createdAt field (date comparison)
-      if (sortConfig.key === 'createdAt') {
-        const aValue = a.timestamp || 0;
-        const bValue = b.timestamp || 0;
-        return sortConfig.direction === 'asc' 
-          ? aValue - bValue 
-          : bValue - aValue;
-      }
-      
-      // For other fields
-      let aValue = a[sortConfig.key] || '';
-      let bValue = b[sortConfig.key] || '';
-      
-      // Convert to string for comparison
-      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
-      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
-      
-      if (aValue < bValue) {
-        return sortConfig.direction === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortConfig.direction === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
-    
-    return result;
-  }, [data, roleFilter, searchTerm, sortConfig]);
-
+    if (aValue > bValue) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+  
+  return result;
+}, [data, roleFilter, searchTerm, sortConfig]);
   // Format date for display
   const formatDate = (date) => {
-    if (!date) return 'Not acknowledged';
-    
-    try {
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    } catch (error) {
-      return 'Invalid date';
-    }
-  };
+  if (!date) return 'Not acknowledged';
+  
+  try {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  } catch (error) {
+    return 'Invalid date';
+  }
+};
 
   // Define columns
   const columns = [
