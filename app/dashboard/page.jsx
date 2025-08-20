@@ -34,7 +34,10 @@ const Dashboard = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('newest'); // 'newest' or 'oldest'
+  const [sortConfig, setSortConfig] = useState({
+    key: 'createdAt', // Default sort by date
+    direction: 'desc', // Default: newest first
+  });
 
   // Fetch data from Firestore
   useEffect(() => {
@@ -48,6 +51,21 @@ const Dashboard = () => {
       ...doc.data(),
     }));
     setData(waitlistData);
+  };
+
+  // Handle column sorting
+  const handleSort = (key) => {
+    let direction = 'desc';
+    if (sortConfig.key === key && sortConfig.direction === 'desc') {
+      direction = 'asc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // Render sort indicator
+  const renderSortIndicator = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === 'desc' ? ' ↓' : ' ↑';
   };
 
   // Delete a document from Firestore
@@ -261,13 +279,21 @@ const Dashboard = () => {
     
     // Apply sorting
     result.sort((a, b) => {
-      const dateA = new Date(a.createdAt || 0);
-      const dateB = new Date(b.createdAt || 0);
-      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+      // Handle missing dates by putting them at the end
+      const aValue = a[sortConfig.key] || (sortConfig.key === 'createdAt' ? '0000-00-00T00:00:00.000Z' : '');
+      const bValue = b[sortConfig.key] || (sortConfig.key === 'createdAt' ? '0000-00-00T00:00:00.000Z' : '');
+      
+      if (aValue < bValue) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
     });
     
     return result;
-  }, [data, roleFilter, searchTerm, sortOrder]);
+  }, [data, roleFilter, searchTerm, sortConfig]);
 
   // Define columns
   const columns = [
@@ -278,27 +304,69 @@ const Dashboard = () => {
     },
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: () => (
+        <span 
+          className={styles.sortableHeader}
+          onClick={() => handleSort('name')}
+        >
+          Name{renderSortIndicator('name')}
+        </span>
+      ),
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      header: () => (
+        <span 
+          className={styles.sortableHeader}
+          onClick={() => handleSort('email')}
+        >
+          Email{renderSortIndicator('email')}
+        </span>
+      ),
     },
     {
       accessorKey: 'phone',
-      header: 'Phone',
+      header: () => (
+        <span 
+          className={styles.sortableHeader}
+          onClick={() => handleSort('phone')}
+        >
+          Phone{renderSortIndicator('phone')}
+        </span>
+      ),
     },
     {
       accessorKey: 'location',
-      header: 'Location',
+      header: () => (
+        <span 
+          className={styles.sortableHeader}
+          onClick={() => handleSort('location')}
+        >
+          Location{renderSortIndicator('location')}
+        </span>
+      ),
     },
     {
       accessorKey: 'role',
-      header: 'Role',
+      header: () => (
+        <span 
+          className={styles.sortableHeader}
+          onClick={() => handleSort('role')}
+        >
+          Role{renderSortIndicator('role')}
+        </span>
+      ),
     },
     {
       accessorKey: 'createdAt',
-      header: 'Sign-up Date',
+      header: () => (
+        <span 
+          className={styles.sortableHeader}
+          onClick={() => handleSort('createdAt')}
+        >
+          Sign-up Date{renderSortIndicator('createdAt')}
+        </span>
+      ),
       cell: ({ row }) => {
         const date = row.original.createdAt ? new Date(row.original.createdAt) : null;
         return date ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : 'N/A';
@@ -381,20 +449,6 @@ const Dashboard = () => {
             <option value="farmer">Farmer</option>
           </select>
         </div>
-
-        {/* Sort Order */}
-        <div className={styles.filterGroup}>
-          <label htmlFor="sortOrder">Sort by Date:</label>
-          <select
-            id="sortOrder"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-          </select>
-        </div>
         
         {/* Group Send Button */}
         <button
@@ -404,6 +458,11 @@ const Dashboard = () => {
         >
           Send to All {roleFilter ? roleFilter + 's' : 'Users'}
         </button>
+      </div>
+
+      {/* Current Sort Info */}
+      <div className={styles.sortInfo}>
+        Sorted by: {sortConfig.key} ({sortConfig.direction === 'desc' ? 'newest first' : 'oldest first'})
       </div>
 
       {/* Table */}
