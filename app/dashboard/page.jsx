@@ -46,10 +46,41 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     const querySnapshot = await getDocs(collection(db, 'waitlist'));
-    const waitlistData = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const waitlistData = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      
+      // Convert Firestore timestamp to JS Date object for proper sorting
+      let createdAt = null;
+      if (data.createdAt) {
+        // Check if it's a Firestore timestamp
+        if (typeof data.createdAt.toDate === 'function') {
+          createdAt = data.createdAt.toDate();
+        } else if (data.createdAt.seconds) {
+          // Handle timestamp object with seconds property
+          createdAt = new Date(data.createdAt.seconds * 1000);
+        } else if (typeof data.createdAt === 'string') {
+          // Handle ISO string
+          createdAt = new Date(data.createdAt);
+        } else {
+          // Fallback to current date if no valid timestamp
+          createdAt = new Date();
+        }
+      } else {
+        // If no createdAt field, use current date
+        createdAt = new Date();
+      }
+      
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: createdAt.toISOString(), // Convert to ISO string for consistent storage
+        timestamp: createdAt.getTime() // Add numeric timestamp for easier sorting
+      };
+    });
+    
+    // Sort by timestamp (newest first) immediately after fetching
+    waitlistData.sort((a, b) => b.timestamp - a.timestamp);
+    
     setData(waitlistData);
   };
 
@@ -152,7 +183,8 @@ const Dashboard = () => {
           phone,
           location,
           role,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          timestamp: Date.now()
         });
         existingEmails.add(emailLower);
       }
@@ -279,9 +311,29 @@ const Dashboard = () => {
     
     // Apply sorting
     result.sort((a, b) => {
-      // Handle missing dates by putting them at the end
-      const aValue = a[sortConfig.key] || (sortConfig.key === 'createdAt' ? '0000-00-00T00:00:00.000Z' : '');
-      const bValue = b[sortConfig.key] || (sortConfig.key === 'createdAt' ? '0000-00-00T00:00:00.000Z' : '');
+      // For timestamp field (numeric)
+      if (sortConfig.key === 'timestamp') {
+        return sortConfig.direction === 'asc' 
+          ? a.timestamp - b.timestamp 
+          : b.timestamp - a.timestamp;
+      }
+      
+      // For other fields
+      let aValue = a[sortConfig.key] || '';
+      let bValue = b[sortConfig.key] || '';
+      
+      // Handle date strings specifically
+      if (sortConfig.key === 'createdAt') {
+        aValue = a.timestamp || 0;
+        bValue = b.timestamp || 0;
+        return sortConfig.direction === 'asc' 
+          ? aValue - bValue 
+          : bValue - aValue;
+      }
+      
+      // Convert to string for comparison
+      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
       
       if (aValue < bValue) {
         return sortConfig.direction === 'asc' ? -1 : 1;
