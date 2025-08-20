@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import styles from '../styles/Waitmain.module.css';
 import { db } from '../firebase.js';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useState } from 'react';
 
 const Waitlist = () => {
