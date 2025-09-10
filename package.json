@@ -2,13 +2,14 @@
   "name": "bayangida",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
-  },
+ "scripts": {
+  "dev": "next dev --turbopack",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "type-check": "tsc --noEmit",
+  "vercel-install": "npm install --legacy-peer-deps"
+},
   "dependencies": {
     "@getbrevo/brevo": "^2.2.0",
     "@hookform/resolvers": "^3.9.1",
