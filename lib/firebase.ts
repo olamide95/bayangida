@@ -13,15 +13,15 @@ const mainFirebaseConfig = {
   measurementId: "G-JZ8QXKX7GD",
 };
 
-// Waitlist-specific Firebase config (replace with your actual waitlist project config)
+// Waitlist-specific Firebase config
 const waitlistFirebaseConfig = {
-  apiKey: 'AIzaSyDAZk8W0UV9gf9CfNXghbN9IJ-1rTZHt08',
-  authDomain: 'bayangida-5e764.firebaseapp.com,',
-  projectId: 'bayangida-5e764',
-  storageBucket: 'bayangida-5e764.firebasestorage.app',
-  messagingSenderId: '100116392889',
-  appId: '1:100116392889:web:1f7d6d88dad07f35bfe468',
-  measurementId: 'G-JYGVP01RLD',
+  apiKey: "AIzaSyDacG5HO-fWDAj8fRxqyhsgcjJRE7apXAY",
+  authDomain: "bayangidawaitlist.firebaseapp.com",
+  projectId: "bayangidawaitlist",
+  storageBucket: "bayangidawaitlist.firebasestorage.app",
+  messagingSenderId: "952632592368",
+  appId: "1:952632592368:web:20835f505e1fc20126ff35",
+  measurementId: "G-ZJJ3VRDM4X"
 };
 
 // Initialize main app
