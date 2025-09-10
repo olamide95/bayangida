@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 const Mailjet = require('node-mailjet');
 
-export async function POST(request) {api
+export async function POST(request) {
   const { email, name } = await request.json();
 
   const mailjet = Mailjet.apiConnect(
@@ -52,7 +52,7 @@ export async function POST(request) {api
         ],
         Subject: 'Welcome to Bayangida Farms!',
         TextPart: `Hi ${name},\n\nThank you for joining the Bayangida Farms waitlist! We have received your submission and will keep you updated.\n\nBest regards,\nThe Bayangida Farms Marketing Team`,
-        HTMLPart: emailHtml, // Use the designed HTML template
+        HTMLPart: emailHtml,
       },
     ],
   });
