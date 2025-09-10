@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'; // Import Framer Motion
 import styles from '../styles/Waitlist.module.css';
 import Image from 'next/image'; // Import Next.js Image component
-import { db } from '../firebase.js'; // Import Firebase
+import { waitlistDb } from '@/lib/firebase'; // Import Firebase
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'; // Firestore functions
 import { useState } from 'react'; // Import useState for dialog state
 
@@ -28,7 +28,7 @@ const Waitlist = () => {
   
     try {
       // Save data to Firestore
-      const docRef = await addDoc(collection(db, 'waitlist'), data);
+      const docRef = await addDoc(collection(waitlistDb, 'waitlist'), data);
       console.log('Document written with ID: ', docRef.id);
   
       // Send email via API route

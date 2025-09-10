@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 const Mailjet = require('node-mailjet');
 
-export async function POST(request) {
+export async function POST(request) {api
   const { email, name } = await request.json();
 
   const mailjet = Mailjet.apiConnect(

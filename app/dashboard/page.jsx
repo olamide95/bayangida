@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { db } from '../firebase';
+import { waitlistDb } from '@/lib/firebase';
 import { collection, getDocs, doc, deleteDoc, setDoc, updateDoc } from 'firebase/firestore';
 import {
   flexRender,
@@ -45,7 +45,7 @@ const Dashboard = () => {
   }, []);
 
  const fetchData = async () => {
-  const querySnapshot = await getDocs(collection(db, 'waitlist'));
+  const querySnapshot = await getDocs(collection(waitlistDb, 'waitlist'));
   const waitlistData = querySnapshot.docs.map((doc) => {
     const data = doc.data();
     
@@ -141,7 +141,7 @@ const Dashboard = () => {
 
     setIsUpdating(true);
     try {
-      await updateDoc(doc(db, 'waitlist', currentEditUser.id), editFormData);
+      await updateDoc(doc(waitlistDb, 'waitlist', currentEditUser.id), editFormData);
       await fetchData(); // Refresh data
       setShowEditDialog(false);
     } catch (error) {

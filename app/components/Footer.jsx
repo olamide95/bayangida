@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from "next/link";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import styles from "../styles/StoreButtons.module.css";
-import { db } from '../firebase.js';
+import { waitlistDb } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
 const Footer = () => {
@@ -26,7 +26,7 @@ const Footer = () => {
 
     try {
       // Add to Firestore
-      const docRef = await addDoc(collection(db, 'newsletterSubscribers'), {
+      const docRef = await addDoc(collection(waitlistDb, 'newsletterSubscribers'), {
         email: email,
         createdAt: new Date(),
       });

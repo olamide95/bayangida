@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import styles from '../styles/Waitmain.module.css';
-import { db } from '../firebase.js';
+import { waitlistDb } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useState } from 'react';
 
@@ -26,7 +26,7 @@ const Waitlist = () => {
    
      try {
        // Save data to Firestore
-       const docRef = await addDoc(collection(db, 'waitlist'), data);
+       const docRef = await addDoc(collection(waitlistDb, 'waitlist'), data);
        console.log('Document written with ID: ', docRef.id);
    
        // Send email via API route
