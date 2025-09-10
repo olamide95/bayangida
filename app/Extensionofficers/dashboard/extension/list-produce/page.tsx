@@ -1,9 +1,9 @@
-
+// app/dashboard/extension/list-produce/page.tsx
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbLink } from "@/components/ui/breadcrumb"
 import { Upload, ImageIcon, Sprout, X } from "lucide-react"
-import { collection, addDoc, serverTimestamp } from "firebase/firestore"
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { useToast } from "@/hooks/use-toast"
 import { uploadImageToStorage } from "@/lib/storage"
@@ -40,6 +40,13 @@ const categories = [
 const sizes = ["Small", "Medium", "Large"]
 const units = ["kg", "g", "lb", "oz", "piece", "bunch", "bag"]
 
+interface Farmer {
+  id: string
+  name: string
+  phone: string
+  location: string
+}
+
 export default function ListProducePage() {
   const [formData, setFormData] = useState({
     productName: "",
@@ -47,19 +54,76 @@ export default function ListProducePage() {
     description: "",
     price: 0,
     size: "",
-    farmerName: "",
-    farmerPhone: "",
-    farmerLocation: "",
+    farmerId: "",
     quantity: 1,
     unit: "kg",
   })
+  const [farmers, setFarmers] = useState<Farmer[]>([])
+  const [selectedFarmer, setSelectedFarmer] = useState<Farmer | null>(null)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [farmersLoading, setFarmersLoading] = useState(true)
   const { toast } = useToast()
+
+  // Current extension officer ID (in a real app, this would come from authentication)
+  const extensionOfficerId = "extension_officer_1"
+
+  useEffect(() => {
+    const fetchFarmers = async () => {
+      try {
+        const farmersQuery = query(
+          collection(db, "farmers"),
+          where("extensionOfficerId", "==", extensionOfficerId),
+          where("status", "==", "active")
+        )
+        const farmersSnapshot = await getDocs(farmersQuery)
+        const farmersData = farmersSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Farmer[]
+
+        setFarmers(farmersData)
+      } catch (error) {
+        console.error("Error fetching farmers:", error)
+        // Mock data for demonstration
+        const mockFarmers: Farmer[] = [
+          {
+            id: "1",
+            name: "Aminu Hassan",
+            phone: "+234 801 234 5678",
+            location: "Kaduna State",
+          },
+          {
+            id: "2",
+            name: "Fatima Abdullahi",
+            phone: "+234 802 345 6789",
+            location: "Kano State",
+          },
+          {
+            id: "3",
+            name: "Ibrahim Musa",
+            phone: "+234 803 456 7890",
+            location: "Sokoto State",
+          },
+        ]
+        setFarmers(mockFarmers)
+      } finally {
+        setFarmersLoading(false)
+      }
+    }
+
+    fetchFarmers()
+  }, [extensionOfficerId])
 
   const handleInputChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleFarmerSelect = (farmerId: string) => {
+    const farmer = farmers.find(f => f.id === farmerId)
+    setSelectedFarmer(farmer || null)
+    handleInputChange("farmerId", farmerId)
   }
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +155,15 @@ export default function ListProducePage() {
       return
     }
 
+    if (!formData.farmerId) {
+      toast({
+        title: "Error",
+        description: "Please select a farmer",
+        variant: "destructive",
+      })
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -114,10 +187,10 @@ export default function ListProducePage() {
         status: "active", // Matches Flutter status
         
         // Farmer information
-        sellerId: "extension_officer", // Default value since we don't have auth
-        sellerName: formData.farmerName,
-        sellerPhone: formData.farmerPhone,
-        sellerLocation: formData.farmerLocation,
+        sellerId: formData.farmerId,
+        sellerName: selectedFarmer?.name || "",
+        sellerPhone: selectedFarmer?.phone || "",
+        sellerLocation: selectedFarmer?.location || "",
         
         // System fields
         createdAt: serverTimestamp(),
@@ -137,12 +210,11 @@ export default function ListProducePage() {
         description: "",
         price: 0,
         size: "",
-        farmerName: "",
-        farmerPhone: "",
-        farmerLocation: "",
+        farmerId: "",
         quantity: 1,
         unit: "kg",
       })
+      setSelectedFarmer(null)
       setSelectedImage(null)
       setImagePreview(null)
     } catch (error) {
@@ -308,37 +380,51 @@ export default function ListProducePage() {
                   <h3 className="text-lg font-semibold text-primary">Farmer Information</h3>
 
                   <div className="space-y-2">
-                    <Label htmlFor="farmerName">Farmer Name *</Label>
-                    <Input
-                      id="farmerName"
-                      placeholder="Enter farmer's full name"
-                      value={formData.farmerName}
-                      onChange={(e) => handleInputChange("farmerName", e.target.value)}
-                      required
-                    />
+                    <Label htmlFor="farmer">Select Farmer *</Label>
+                    <Select 
+                      value={formData.farmerId} 
+                      onValueChange={handleFarmerSelect}
+                      disabled={farmersLoading || farmers.length === 0}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={farmersLoading ? "Loading farmers..." : "Select a farmer"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {farmers.map((farmer) => (
+                          <SelectItem key={farmer.id} value={farmer.id}>
+                            {farmer.name} - {farmer.location}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {farmers.length === 0 && !farmersLoading && (
+                      <p className="text-sm text-muted-foreground">
+                        No farmers found. Please add farmers first from the Extension Services page.
+                      </p>
+                    )}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="farmerPhone">Phone Number *</Label>
-                    <Input
-                      id="farmerPhone"
-                      placeholder="+234 801 234 5678"
-                      value={formData.farmerPhone}
-                      onChange={(e) => handleInputChange("farmerPhone", e.target.value)}
-                      required
-                    />
-                  </div>
+                  {selectedFarmer && (
+                    <>
+                      <div className="space-y-2">
+                        <Label>Farmer Phone</Label>
+                        <Input
+                          value={selectedFarmer.phone}
+                          disabled
+                          className="bg-muted"
+                        />
+                      </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="farmerLocation">Farm Location *</Label>
-                    <Input
-                      id="farmerLocation"
-                      placeholder="State, LGA, Village"
-                      value={formData.farmerLocation}
-                      onChange={(e) => handleInputChange("farmerLocation", e.target.value)}
-                      required
-                    />
-                  </div>
+                      <div className="space-y-2">
+                        <Label>Farmer Location</Label>
+                        <Input
+                          value={selectedFarmer.location}
+                          disabled
+                          className="bg-muted"
+                        />
+                      </div>
+                    </>
+                  )}
 
                   {/* Image Upload */}
                   <div className="space-y-2">
@@ -388,7 +474,7 @@ export default function ListProducePage() {
               <div className="flex justify-end">
                 <Button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !formData.farmerId}
                   className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
                 >
                   {loading ? (

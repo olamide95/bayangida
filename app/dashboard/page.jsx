@@ -103,7 +103,7 @@ const Dashboard = () => {
   // Delete a document from Firestore
   const handleDelete = async (id) => {
     try {
-      await deleteDoc(doc(db, 'waitlist', id));
+      await deleteDoc(doc(waitlistDb, 'waitlist', id));
       setData(data.filter((item) => item.id !== id));
     } catch (error) {
       console.error('Error deleting document: ', error);
@@ -192,7 +192,7 @@ const Dashboard = () => {
 
       // Add users to Firestore
       for (const user of usersToAdd) {
-        const docRef = doc(collection(db, 'waitlist'));
+        const docRef = doc(collection(waitlistDb, 'waitlist'));
         await setDoc(docRef, user);
       }
 
