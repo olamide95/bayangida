@@ -19,6 +19,7 @@ import { Search, Eye, Phone, Mail, MapPin, Users, Plus, UserPlus, Tractor } from
 import { collection, getDocs, addDoc, serverTimestamp, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/hooks/use-auth"
 
 interface Farmer {
   id: string
@@ -44,12 +45,15 @@ export default function ExtensionServicesPage() {
     location: "",
   })
   const { toast } = useToast()
+  const { user } = useAuth()
 
-  // Current extension officer ID (in a real app, this would come from authentication)
-  const extensionOfficerId = "extension_officer_1"
+  // Get extension officer ID from authenticated user
+  const extensionOfficerId = user?.uid || ""
 
   useEffect(() => {
     const fetchFarmers = async () => {
+      if (!extensionOfficerId) return
+      
       try {
         const farmersQuery = query(
           collection(db, "farmers"),
