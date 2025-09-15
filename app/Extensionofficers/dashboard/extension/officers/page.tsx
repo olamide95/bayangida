@@ -1,7 +1,3 @@
-// app/dashboard/extension/page.tsx
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @next/next/no-img-element */
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -16,9 +12,22 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Search, Eye, Phone, Mail, MapPin, Users, Plus, UserPlus, Tractor } from "lucide-react"
-import { collection, getDocs, addDoc, serverTimestamp, query, where } from "firebase/firestore"
+import { collection, getDocs, addDoc, serverTimestamp, query, where, doc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/hooks/use-auth"
+import Link from "next/link"
+
+interface ExtensionOfficer {
+  id: string
+  name: string
+  email: string
+  phone: string
+  location: string
+  specialization: string
+  userId: string
+  // ... other fields
+}
 
 interface Farmer {
   id: string
@@ -31,12 +40,36 @@ interface Farmer {
   extensionOfficerId: string
 }
 
+interface Produce {
+  id: string
+  productName: string
+  productImage: string
+  category: string
+  description: string
+  price: number
+  size: string
+  quantity: number
+  unit: string
+  status: string
+  sellerId: string
+  sellerName: string
+  sellerPhone: string
+  sellerLocation: string
+  createdAt: any
+}
+
 export default function ExtensionServicesPage() {
+  const [extensionOfficer, setExtensionOfficer] = useState<ExtensionOfficer | null>(null)
   const [farmers, setFarmers] = useState<Farmer[]>([])
   const [filteredFarmers, setFilteredFarmers] = useState<Farmer[]>([])
+  const [selectedFarmer, setSelectedFarmer] = useState<Farmer | null>(null)
+  const [farmerProduce, setFarmerProduce] = useState<Produce[]>([])
   const [loading, setLoading] = useState(true)
+  const [officerLoading, setOfficerLoading] = useState(true)
+  const [produceLoading, setProduceLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [isAddFarmerDialogOpen, setIsAddFarmerDialogOpen] = useState(false)
+  const [isViewProduceDialogOpen, setIsViewProduceDialogOpen] = useState(false)
   const [newFarmer, setNewFarmer] = useState({
     name: "",
     email: "",
@@ -44,16 +77,57 @@ export default function ExtensionServicesPage() {
     location: "",
   })
   const { toast } = useToast()
+  const { user } = useAuth()
 
-  // Current extension officer ID (in a real app, this would come from authentication)
-  const extensionOfficerId = "extension_officer_1"
+  useEffect(() => {
+    const fetchExtensionOfficer = async () => {
+      if (!user?.uid) return
+      
+      try {
+        // Query to find the extension officer document with matching userId
+        const officersQuery = query(
+          collection(db, "extension_officers"),
+          where("userId", "==", user.uid)
+        )
+        const officersSnapshot = await getDocs(officersQuery)
+        
+        if (!officersSnapshot.empty) {
+          const officerDoc = officersSnapshot.docs[0]
+          setExtensionOfficer({
+            id: officerDoc.id,
+            ...officerDoc.data()
+          } as ExtensionOfficer)
+        } else {
+          toast({
+            title: "Error",
+            description: "Extension officer profile not found",
+            variant: "destructive",
+          })
+        }
+      } catch (error) {
+        console.error("Error fetching extension officer:", error)
+        toast({
+          title: "Error",
+          description: "Failed to fetch extension officer details",
+          variant: "destructive",
+        })
+      } finally {
+        setOfficerLoading(false)
+      }
+    }
+
+    fetchExtensionOfficer()
+  }, [user, toast])
 
   useEffect(() => {
     const fetchFarmers = async () => {
+      if (!extensionOfficer?.id) return
+      
       try {
+        // Query to get only farmers assigned to this extension officer
         const farmersQuery = query(
           collection(db, "farmers"),
-          where("extensionOfficerId", "==", extensionOfficerId)
+          where("extensionOfficerId", "==", extensionOfficer.id)
         )
         const farmersSnapshot = await getDocs(farmersQuery)
         const farmersData = farmersSnapshot.docs.map((doc) => ({
@@ -65,48 +139,20 @@ export default function ExtensionServicesPage() {
         setFilteredFarmers(farmersData)
       } catch (error) {
         console.error("Error fetching farmers:", error)
-        // Mock data for demonstration
-        const mockFarmers: Farmer[] = [
-          {
-            id: "1",
-            name: "Aminu Hassan",
-            email: "aminu.hassan@example.com",
-            phone: "+234 801 234 5678",
-            location: "Kaduna State",
-            createdAt: new Date(),
-            status: "active",
-            extensionOfficerId: extensionOfficerId,
-          },
-          {
-            id: "2",
-            name: "Fatima Abdullahi",
-            email: "fatima.abdullahi@example.com",
-            phone: "+234 802 345 6789",
-            location: "Kano State",
-            createdAt: new Date(),
-            status: "active",
-            extensionOfficerId: extensionOfficerId,
-          },
-          {
-            id: "3",
-            name: "Ibrahim Musa",
-            email: "ibrahim.musa@example.com",
-            phone: "+234 803 456 7890",
-            location: "Sokoto State",
-            createdAt: new Date(),
-            status: "active",
-            extensionOfficerId: extensionOfficerId,
-          },
-        ]
-        setFarmers(mockFarmers)
-        setFilteredFarmers(mockFarmers)
+        toast({
+          title: "Error",
+          description: "Failed to fetch farmers",
+          variant: "destructive",
+        })
       } finally {
         setLoading(false)
       }
     }
 
-    fetchFarmers()
-  }, [extensionOfficerId])
+    if (extensionOfficer) {
+      fetchFarmers()
+    }
+  }, [extensionOfficer, toast])
 
   useEffect(() => {
     const filtered = farmers.filter(
@@ -119,19 +165,21 @@ export default function ExtensionServicesPage() {
   }, [searchTerm, farmers])
 
   const handleAddFarmer = async () => {
+    if (!extensionOfficer) return
+    
     try {
       const farmerData = {
         ...newFarmer,
-        extensionOfficerId,
+        extensionOfficerId: extensionOfficer.id, // Use the extension officer's document ID
         status: "active",
         createdAt: serverTimestamp(),
       }
 
-      await addDoc(collection(db, "farmers"), farmerData)
+      const docRef = await addDoc(collection(db, "farmers"), farmerData)
 
-      // Add to local state
+      // Add to local state with the actual document ID
       const newFarmerWithId = {
-        id: `temp-${Date.now()}`,
+        id: docRef.id,
         ...farmerData,
         createdAt: new Date(),
       } as Farmer
@@ -162,6 +210,38 @@ export default function ExtensionServicesPage() {
     }
   }
 
+  const fetchFarmerProduce = async (farmerId: string) => {
+    setProduceLoading(true)
+    try {
+      // Query to get produce listings for the selected farmer
+      const produceQuery = query(
+        collection(db, "produce_listings"),
+        where("sellerId", "==", farmerId)
+      )
+      const produceSnapshot = await getDocs(produceQuery)
+      const produceData = produceSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Produce[]
+
+      setFarmerProduce(produceData)
+      
+      // Find the selected farmer
+      const farmer = farmers.find(f => f.id === farmerId)
+      setSelectedFarmer(farmer || null)
+      setIsViewProduceDialogOpen(true)
+    } catch (error) {
+      console.error("Error fetching farmer produce:", error)
+      toast({
+        title: "Error",
+        description: "Failed to fetch farmer's produce",
+        variant: "destructive",
+      })
+    } finally {
+      setProduceLoading(false)
+    }
+  }
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
@@ -184,6 +264,30 @@ export default function ExtensionServicesPage() {
     } catch (error) {
       return "Invalid date"
     }
+  }
+
+  if (officerLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="flex items-center justify-center space-x-2">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <span>Loading extension officer details...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (!extensionOfficer) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold">Extension officer profile not found</h2>
+          <p className="text-muted-foreground mt-2">
+            Please contact administrator to set up your extension officer profile.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -246,6 +350,7 @@ export default function ExtensionServicesPage() {
                         placeholder="Enter farmer's name"
                         value={newFarmer.name}
                         onChange={(e) => setNewFarmer({ ...newFarmer, name: e.target.value })}
+                        required
                       />
                     </div>
                     <div className="grid gap-2">
@@ -256,6 +361,7 @@ export default function ExtensionServicesPage() {
                         placeholder="Enter farmer's email"
                         value={newFarmer.email}
                         onChange={(e) => setNewFarmer({ ...newFarmer, email: e.target.value })}
+                        required
                       />
                     </div>
                     <div className="grid gap-2">
@@ -265,6 +371,7 @@ export default function ExtensionServicesPage() {
                         placeholder="Enter farmer's phone number"
                         value={newFarmer.phone}
                         onChange={(e) => setNewFarmer({ ...newFarmer, phone: e.target.value })}
+                        required
                       />
                     </div>
                     <div className="grid gap-2">
@@ -274,6 +381,7 @@ export default function ExtensionServicesPage() {
                         placeholder="Enter farmer's location"
                         value={newFarmer.location}
                         onChange={(e) => setNewFarmer({ ...newFarmer, location: e.target.value })}
+                        required
                       />
                     </div>
                   </div>
@@ -380,9 +488,21 @@ export default function ExtensionServicesPage() {
                         <TableCell>{getStatusBadge(farmer.status)}</TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
-                            <Button variant="outline" size="sm" className="h-8 w-8 p-0 bg-transparent">
-                              <Eye className="h-4 w-4" />
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-8 p-0 px-2 bg-transparent"
+                              onClick={() => fetchFarmerProduce(farmer.id)}
+                            >
+                              <Eye className="h-4 w-4 mr-1" />
+                              View Produce
                             </Button>
+                            <Link href={`/dashboard/extension/list-produce?farmerId=${farmer.id}`}>
+                              <Button variant="outline" size="sm" className="h-8 p-0 px-2 bg-transparent">
+                                <Plus className="h-4 w-4 mr-1" />
+                                Add Produce
+                              </Button>
+                            </Link>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -393,6 +513,84 @@ export default function ExtensionServicesPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Farmer Produce Dialog */}
+        <Dialog open={isViewProduceDialogOpen} onOpenChange={setIsViewProduceDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>
+                {selectedFarmer ? `${selectedFarmer.name}'s Produce` : "Farmer Produce"}
+              </DialogTitle>
+              <DialogDescription>
+                {selectedFarmer ? `View all produce listings for ${selectedFarmer.name}` : "View produce listings"}
+              </DialogDescription>
+            </DialogHeader>
+            {produceLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  <span>Loading produce...</span>
+                </div>
+              </div>
+            ) : farmerProduce.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8">
+                <Tractor className="h-12 w-12 text-muted-foreground/50 mb-4" />
+                <p className="text-muted-foreground">No produce listings found for this farmer</p>
+                {selectedFarmer && (
+                  <Link href={`/dashboard/extension/list-produce?farmerId=${selectedFarmer.id}`}>
+                    <Button className="mt-4">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Produce for {selectedFarmer.name}
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <div className="grid gap-4 py-4">
+                {farmerProduce.map((produce) => (
+                  <Card key={produce.id}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-4">
+                        <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden">
+                          {produce.productImage ? (
+                            <img
+                              src={produce.productImage}
+                              alt={produce.productName}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-muted">
+                              <Tractor className="h-8 w-8 text-muted-foreground" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold">{produce.productName}</h3>
+                          <p className="text-sm text-muted-foreground">{produce.category}</p>
+                          <p className="text-sm mt-1 line-clamp-2">{produce.description}</p>
+                          <div className="flex items-center justify-between mt-2">
+                            <div>
+                              <span className="font-semibold">₦{produce.price.toLocaleString()}</span>
+                              <span className="text-sm text-muted-foreground ml-1">
+                                per {produce.quantity} {produce.unit}
+                              </span>
+                            </div>
+                            <Badge className={produce.status === "active" ? "bg-green-500" : "bg-gray-500"}>
+                              {produce.status}
+                            </Badge>
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-2">
+                            Listed on: {formatDate(produce.createdAt)}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   )
