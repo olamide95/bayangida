@@ -487,7 +487,7 @@ const Dashboard = () => {
           <div className={styles.searchResults}>
             {searchTerm && (
               <span className={styles.resultsCount}>
-                Found {filteredData.length} user{filteredData.length !== 1 ? 's' : ''} matching "{searchTerm}"
+                Found {filteredData.length} user{filteredData.length !== 1 ? 's' : ''} matching &ldquo;{searchTerm}&rdquo;
               </span>
             )}
           </div>
