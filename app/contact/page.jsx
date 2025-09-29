@@ -264,9 +264,14 @@ const Contact = () => {
         className={styles.mapSection}
       >
 
-<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1970.4678267698866!2d7.4311676711641335!3d8.978068700000007!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e759fb3981549%3A0xfb4156d3156fc0b5!2sBayangida%20Farms!5e0!3m2!1sen!2sng!4v1759167571317!5m2!1sen!2sng" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-    
+        <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1970.467882347872!2d7.431206257671732!3d8.978058471287094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e759fb3981549%3A0xfb4156d3156fc0b5!2sBayangida%20Farms!5e0!3m2!1sen!2sng!4v1759167986475!5m2!1sen!2sng" 
+          width="100%"
+          height="450"
+          style={{ border: 0 }}
+          loading="lazy"
+        ></iframe>
       </motion.section>
 
       <Footer />
