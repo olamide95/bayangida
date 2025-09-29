@@ -264,7 +264,7 @@ const Contact = () => {
         className={styles.mapSection}
       >
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.715244202699!2d7.469290315278873!3d9.01298039354487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e8777a7c8c6f1%3A0x1f9f5b5b5b5b5b5b!2sBiltmore%20Estate%2C%20Abuja%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1631234567890!5m2!1sen!2sng"
+          src="https://www.google.com/maps/place/Bayangida+Farms/@8.9780687,7.4311784,17z/data=!4m7!3m6!1s0x104e759fb3981549:0xfb4156d3156fc0b5!4b1!8m2!3d8.9779419!4d7.4311848!16s%2Fg%2F11xdrr2ttk?entry=ttu&g_ep=EgoyMDI1MDkyNC4wIKXMDSoASAFQAw%3D%3D"
           width="100%"
           height="450"
           style={{ border: 0 }}
