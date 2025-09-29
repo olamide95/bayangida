@@ -263,14 +263,10 @@ const Contact = () => {
         viewport={{ once: true }}
         className={styles.mapSection}
       >
-        <iframe
-          src="https://www.google.com/maps/place/Bayangida+Farms/@8.9780687,7.4311784,17z/data=!4m7!3m6!1s0x104e759fb3981549:0xfb4156d3156fc0b5!4b1!8m2!3d8.9779419!4d7.4311848!16s%2Fg%2F11xdrr2ttk?entry=ttu&g_ep=EgoyMDI1MDkyNC4wIKXMDSoASAFQAw%3D%3D"
-          width="100%"
-          height="450"
-          style={{ border: 0 }}
-          allowFullScreen=""
-          loading="lazy"
-        ></iframe>
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1970.4678267698866!2d7.4311676711641335!3d8.978068700000007!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e759fb3981549%3A0xfb4156d3156fc0b5!2sBayangida%20Farms!5e0!3m2!1sen!2sng!4v1759167571317!5m2!1sen!2sng" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+    
       </motion.section>
 
       <Footer />
