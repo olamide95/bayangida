@@ -234,38 +234,45 @@ const Dashboard = () => {
     }));
   };
 
-  const sendEmail = async () => {
-    if (!emailData.subject || !emailData.content) {
-      alert('Please fill in both subject and content');
-      return;
+// In your Dashboard component, update the sendEmail function
+const sendEmail = async () => {
+  if (!emailData.subject || !emailData.content) {
+    alert('Please fill in both subject and content');
+    return;
+  }
+
+  setIsSending(true);
+
+  try {
+    let recipients = [];
+    
+    if (emailData.recipient) {
+      recipients = [emailData.recipient];
+    } else {
+      recipients = roleFilter ? 
+        data.filter(item => item.role === roleFilter) : 
+        data;
     }
 
-    setIsSending(true);
-
-    try {
-      let recipients = [];
+    for (const recipient of recipients) {
+      // Preserve formatting by converting newlines to HTML breaks
+      const formattedContent = emailData.content.replace(/\n/g, '<br>');
       
-      if (emailData.recipient) {
-        recipients = [emailData.recipient];
-      } else {
-        recipients = roleFilter ? 
-          data.filter(item => item.role === roleFilter) : 
-          data;
-      }
-
-      for (const recipient of recipients) {
-        await sendSingleEmail(recipient.email, recipient.name, emailData.subject, emailData.content);
-      }
-
-      alert(`Email(s) sent successfully to ${recipients.length} recipient(s)`);
-      closeEmailDialog();
-    } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Failed to send email(s)');
-    } finally {
-      setIsSending(false);
+      await sendSingleEmail(recipient.email, recipient.name, emailData.subject, formattedContent);
     }
-  };
+
+    alert(`Email(s) sent successfully to ${recipients.length} recipient(s)`);
+    closeEmailDialog();
+  } catch (error) {
+    console.error('Error sending email:', error);
+    alert('Failed to send email(s)');
+  } finally {
+    setIsSending(false);
+  }
+};
+
+// Update the email template to handle formatted content properly
+
 
   const sendSingleEmail = async (email, name, subject, content) => {
     const response = await fetch('/api/sendcustomemail', {
