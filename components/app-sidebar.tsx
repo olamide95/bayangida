@@ -81,7 +81,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
+              <Link href="/Extensionofficers/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden">
                   <img
                     src={ "/placeholder.png"}
