@@ -13,11 +13,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbLink } from "@/components/ui/breadcrumb"
-import { Upload, ImageIcon, Sprout, X } from "lucide-react"
+import { Upload, ImageIcon, Sprout, X, ArrowLeft, Eye } from "lucide-react"
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { useToast } from "@/hooks/use-toast"
 import { uploadImageToStorage } from "@/lib/storage"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/use-auth"
 
 const categories = [
   "Grains and Legumes",
@@ -47,6 +49,16 @@ interface Farmer {
   location: string
 }
 
+interface ExtensionOfficer {
+  id: string
+  name: string
+  email: string
+  phone: string
+  location: string
+  specialization: string
+  userId: string
+}
+
 export default function ListProducePage() {
   const [formData, setFormData] = useState({
     productName: "",
@@ -59,22 +71,66 @@ export default function ListProducePage() {
     unit: "kg",
   })
   const [farmers, setFarmers] = useState<Farmer[]>([])
+  const [extensionOfficer, setExtensionOfficer] = useState<ExtensionOfficer | null>(null)
   const [selectedFarmer, setSelectedFarmer] = useState<Farmer | null>(null)
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [farmersLoading, setFarmersLoading] = useState(true)
+  const [officerLoading, setOfficerLoading] = useState(true)
   const { toast } = useToast()
+  const router = useRouter()
+  const { user } = useAuth()
 
-  // Current extension officer ID (in a real app, this would come from authentication)
-  const extensionOfficerId = "extension_officer_1"
+  // Fetch extension officer first using auth
+  useEffect(() => {
+    const fetchExtensionOfficer = async () => {
+      if (!user?.uid) return
+      
+      try {
+        const officersQuery = query(
+          collection(db, "extension_officers"),
+          where("userId", "==", user.uid)
+        )
+        const officersSnapshot = await getDocs(officersQuery)
+        
+        if (!officersSnapshot.empty) {
+          const officerDoc = officersSnapshot.docs[0]
+          setExtensionOfficer({
+            id: officerDoc.id,
+            ...officerDoc.data()
+          } as ExtensionOfficer)
+        } else {
+          toast({
+            title: "Error",
+            description: "Extension officer profile not found",
+            variant: "destructive",
+          })
+        }
+      } catch (error) {
+        console.error("Error fetching extension officer:", error)
+        toast({
+          title: "Error",
+          description: "Failed to fetch extension officer details",
+          variant: "destructive",
+        })
+      } finally {
+        setOfficerLoading(false)
+      }
+    }
 
+    fetchExtensionOfficer()
+  }, [user, toast])
+
+  // Fetch farmers for this extension officer using the officer's document ID
   useEffect(() => {
     const fetchFarmers = async () => {
+      if (!extensionOfficer?.id) return
+      
       try {
         const farmersQuery = query(
           collection(db, "farmers"),
-          where("extensionOfficerId", "==", extensionOfficerId),
+          where("extensionOfficerId", "==", extensionOfficer.id),
           where("status", "==", "active")
         )
         const farmersSnapshot = await getDocs(farmersQuery)
@@ -86,35 +142,20 @@ export default function ListProducePage() {
         setFarmers(farmersData)
       } catch (error) {
         console.error("Error fetching farmers:", error)
-        // Mock data for demonstration
-        const mockFarmers: Farmer[] = [
-          {
-            id: "1",
-            name: "Aminu Hassan",
-            phone: "+234 801 234 5678",
-            location: "Kaduna State",
-          },
-          {
-            id: "2",
-            name: "Fatima Abdullahi",
-            phone: "+234 802 345 6789",
-            location: "Kano State",
-          },
-          {
-            id: "3",
-            name: "Ibrahim Musa",
-            phone: "+234 803 456 7890",
-            location: "Sokoto State",
-          },
-        ]
-        setFarmers(mockFarmers)
+        toast({
+          title: "Error",
+          description: "Failed to fetch farmers",
+          variant: "destructive",
+        })
       } finally {
         setFarmersLoading(false)
       }
     }
 
-    fetchFarmers()
-  }, [extensionOfficerId])
+    if (extensionOfficer) {
+      fetchFarmers()
+    }
+  }, [extensionOfficer, toast])
 
   const handleInputChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -170,10 +211,7 @@ export default function ListProducePage() {
       // Upload image using the utility function
       const imageUrl = await uploadImageToStorage(selectedImage, "produce")
 
-      // Generate a unique order ID (similar to Flutter implementation)
-      const orderId = `ORD-${Date.now().toString(36).toUpperCase()}`
-
-      // Save to Firestore - matching the Flutter structure
+      // Save to Firestore
       await addDoc(collection(db, "produce_listings"), {
         // Product information
         productName: formData.productName,
@@ -184,13 +222,17 @@ export default function ListProducePage() {
         size: formData.size,
         quantity: formData.quantity,
         unit: formData.unit,
-        status: "active", // Matches Flutter status
+        status: "active",
         
         // Farmer information
         sellerId: formData.farmerId,
         sellerName: selectedFarmer?.name || "",
         sellerPhone: selectedFarmer?.phone || "",
         sellerLocation: selectedFarmer?.location || "",
+        
+        // Extension officer information (using the document ID from auth)
+        extensionOfficerId: extensionOfficer?.id,
+        extensionOfficerName: extensionOfficer?.name,
         
         // System fields
         createdAt: serverTimestamp(),
@@ -217,6 +259,12 @@ export default function ListProducePage() {
       setSelectedFarmer(null)
       setSelectedImage(null)
       setImagePreview(null)
+
+      // Navigate to view all produce page after successful listing
+      setTimeout(() => {
+        router.push("/Extensionofficers/dashboard/extension/view-produce")
+      }, 1500)
+
     } catch (error) {
       console.error("Error listing produce:", error)
       toast({
@@ -227,6 +275,34 @@ export default function ListProducePage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleViewProduce = () => {
+    router.push("/Extensionofficers/dashboard/extension/view-produce")
+  }
+
+  if (officerLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="flex items-center justify-center space-x-2">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <span>Loading extension officer details...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (!extensionOfficer) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold">Extension officer profile not found</h2>
+          <p className="text-muted-foreground mt-2">
+            Please contact administrator to set up your extension officer profile.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -253,12 +329,33 @@ export default function ListProducePage() {
 
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white">
-              <Sprout className="h-5 w-5" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.push("/dashboard/extension")}
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Button>
+              <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white">
+                  <Sprout className="h-5 w-5" />
+                </div>
+                List Produce for Farmer
+              </h1>
             </div>
-            List Produce for Farmer
-          </h1>
+            <Button
+              variant="outline"
+              onClick={handleViewProduce}
+              className="flex items-center gap-2"
+            >
+              <Eye className="h-4 w-4" />
+              View All Produce
+            </Button>
+          </div>
           <p className="text-muted-foreground">Help farmers list their produce on the Bayangida platform</p>
         </div>
 
@@ -471,20 +568,29 @@ export default function ListProducePage() {
                 </div>
               </div>
 
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleViewProduce}
+                  className="flex items-center gap-2"
+                >
+                  <Eye className="h-4 w-4" />
+                  View All Produce
+                </Button>
                 <Button
                   type="submit"
                   disabled={loading || !formData.farmerId}
-                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
+                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 flex items-center gap-2"
                 >
                   {loading ? (
                     <>
-                      <Upload className="mr-2 h-4 w-4 animate-spin" />
+                      <Upload className="h-4 w-4 animate-spin" />
                       Listing Produce...
                     </>
                   ) : (
                     <>
-                      <Upload className="mr-2 h-4 w-4" />
+                      <Upload className="h-4 w-4" />
                       List Produce
                     </>
                   )}
