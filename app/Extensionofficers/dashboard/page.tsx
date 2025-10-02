@@ -412,6 +412,7 @@ export default function ExtensionServicesPage() {
               <Table>
                 <TableHeader className="bg-muted/50">
                   <TableRow>
+                    <TableHead className="font-semibold w-12 text-center">S/N</TableHead>
                     <TableHead className="font-semibold">Farmer Details</TableHead>
                     <TableHead className="font-semibold">Contact Info</TableHead>
                     <TableHead className="font-semibold">Location</TableHead>
@@ -423,7 +424,7 @@ export default function ExtensionServicesPage() {
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8">
+                      <TableCell colSpan={7} className="text-center py-8">
                         <div className="flex items-center justify-center space-x-2">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
                           <span>Loading farmers...</span>
@@ -432,7 +433,7 @@ export default function ExtensionServicesPage() {
                     </TableRow>
                   ) : filteredFarmers.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8">
+                      <TableCell colSpan={7} className="text-center py-8">
                         <div className="flex flex-col items-center space-y-2">
                           <Users className="h-12 w-12 text-muted-foreground/50" />
                           <span className="text-muted-foreground">No farmers found</span>
@@ -447,8 +448,11 @@ export default function ExtensionServicesPage() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredFarmers.map((farmer) => (
+                    filteredFarmers.map((farmer, index) => (
                       <TableRow key={farmer.id} className="hover:bg-muted/30 transition-colors">
+                        <TableCell className="text-center text-sm font-medium text-muted-foreground">
+                          {index + 1}
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-3">
                             <div className="p-2 rounded-full bg-green-100 text-green-600">
@@ -457,7 +461,7 @@ export default function ExtensionServicesPage() {
                             <div>
                               <div className="font-medium">{farmer.name}</div>
                               <div className="text-xs text-muted-foreground">
-                                ID: {farmer.id}
+                                ID: {farmer.id.substring(0, 8)}...
                               </div>
                             </div>
                           </div>
