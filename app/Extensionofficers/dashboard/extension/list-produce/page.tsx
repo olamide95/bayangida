@@ -39,8 +39,27 @@ const categories = [
   "Processed products",
 ]
 
-const sizes = ["Small", "Medium", "Large"]
-const units = ["kg", "g", "lb", "oz", "piece", "bunch", "bag"]
+// Category-based size mapping following the algorithm
+const categorySizeMap: Record<string, string[]> = {
+  'Grains and Legumes': ['Bags (numbers)', 'Kg (numbers)', 'Custard bucket'],
+  'Tubers': ['Number (e.g. 5 tubers, 100 tubers)', 'Bags (Kg)'],
+  'Fruits and Nuts': ['Number', 'Bunch', 'Basket', 'Bags', 'Carton'],
+  'Vegetables and Melons': ['Bunch', 'Basket', 'Bags'],
+  'Livestock': ['Number'],
+  'Poultry': ['Number'],
+  'Fish and aquaculture': ['Number', 'Weight', 'Bags', 'Carton'],
+  'Animal product': ['Liters', 'Weight/Number', 'Bags', 'Crates'],
+  'Oil': ['Liters'],
+  'Cash crops': ['Bags (Kg)'],
+  'Flowers': ['Number'],
+  'Spices and Herbs': ['Number'],
+  'By products': ['Bags (Kg)'],
+  'Seed and seedlings': ['Number'],
+  'Processed products': ['Number']
+}
+
+// Default units for fallback
+const defaultUnits = ["kg", "g", "lb", "oz", "piece", "bunch", "bag"]
 
 interface Farmer {
   id: string
@@ -70,6 +89,8 @@ export default function ListProducePage() {
     quantity: 1,
     unit: "kg",
   })
+  const [availableSizes, setAvailableSizes] = useState<string[]>([])
+  const [availableUnits, setAvailableUnits] = useState<string[]>(defaultUnits)
   const [farmers, setFarmers] = useState<Farmer[]>([])
   const [extensionOfficer, setExtensionOfficer] = useState<ExtensionOfficer | null>(null)
   const [selectedFarmer, setSelectedFarmer] = useState<Farmer | null>(null)
@@ -157,8 +178,67 @@ export default function ListProducePage() {
     }
   }, [extensionOfficer, toast])
 
+  // Update available sizes and units when category changes
+  useEffect(() => {
+    if (formData.category && categorySizeMap[formData.category]) {
+      const sizes = categorySizeMap[formData.category]
+      setAvailableSizes(sizes)
+      
+      // Set default size to first available option
+      if (sizes.length > 0 && !formData.size) {
+        setFormData(prev => ({ ...prev, size: sizes[0] }))
+      }
+      
+      // Generate units based on the selected size
+      updateUnitsBasedOnSize(sizes[0] || '')
+    } else {
+      setAvailableSizes([])
+      setAvailableUnits(defaultUnits)
+    }
+  }, [formData.category])
+
+  // Update units when size changes
+  useEffect(() => {
+    if (formData.size) {
+      updateUnitsBasedOnSize(formData.size)
+    }
+  }, [formData.size])
+
+  const updateUnitsBasedOnSize = (size: string) => {
+    let units: string[] = []
+    
+    if (size.includes('Kg') || size.includes('Weight')) {
+      units = ['kg', 'g', 'lb', 'oz']
+    } else if (size.includes('Liters')) {
+      units = ['liters', 'ml']
+    } else if (size.includes('Number') || size.includes('Bunch') || size.includes('Basket') || 
+               size.includes('Carton') || size.includes('Crates') || size.includes('Custard bucket')) {
+      units = ['piece', 'bunch', 'basket', 'carton', 'crate', 'bucket']
+    } else if (size.includes('Bags')) {
+      units = ['bag', 'kg', 'g']
+    } else {
+      units = defaultUnits
+    }
+    
+    setAvailableUnits(units)
+    
+    // Set default unit to first available option if current unit is not in available units
+    if (!units.includes(formData.unit) && units.length > 0) {
+      setFormData(prev => ({ ...prev, unit: units[0] }))
+    }
+  }
+
   const handleInputChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setFormData((prev) => ({ 
+      ...prev, 
+      category: value,
+      size: "", // Reset size when category changes
+      unit: "kg" // Reset unit when category changes
+    }))
   }
 
   const handleFarmerSelect = (farmerId: string) => {
@@ -200,6 +280,15 @@ export default function ListProducePage() {
       toast({
         title: "Error",
         description: "Please select a farmer",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!formData.size) {
+      toast({
+        title: "Error",
+        description: "Please select a size",
         variant: "destructive",
       })
       return
@@ -259,6 +348,8 @@ export default function ListProducePage() {
       setSelectedFarmer(null)
       setSelectedImage(null)
       setImagePreview(null)
+      setAvailableSizes([])
+      setAvailableUnits(defaultUnits)
 
       // Navigate to view all produce page after successful listing
       setTimeout(() => {
@@ -334,7 +425,7 @@ export default function ListProducePage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => router.push("/Extensionofficers/dashboard/extension")}
+                onClick={() => router.push("/Extensionofficers/dashboard/extension/view-produce")}
                 className="flex items-center gap-2"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -387,7 +478,7 @@ export default function ListProducePage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="category">Category *</Label>
-                    <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
+                    <Select value={formData.category} onValueChange={handleCategoryChange}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
@@ -428,18 +519,33 @@ export default function ListProducePage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="size">Size *</Label>
-                      <Select value={formData.size} onValueChange={(value) => handleInputChange("size", value)}>
+                      <Select 
+                        value={formData.size} 
+                        onValueChange={(value) => handleInputChange("size", value)}
+                        disabled={!formData.category || availableSizes.length === 0}
+                      >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select size" />
+                          <SelectValue placeholder={
+                            !formData.category 
+                              ? "Select category first" 
+                              : availableSizes.length === 0 
+                                ? "No sizes available" 
+                                : "Select size"
+                          } />
                         </SelectTrigger>
                         <SelectContent>
-                          {sizes.map((size) => (
+                          {availableSizes.map((size) => (
                             <SelectItem key={size} value={size}>
                               {size}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
+                      {formData.category && availableSizes.length === 0 && (
+                        <p className="text-sm text-muted-foreground">
+                          No sizes configured for this category.
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -457,12 +563,18 @@ export default function ListProducePage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="unit">Unit *</Label>
-                    <Select value={formData.unit} onValueChange={(value) => handleInputChange("unit", value)}>
+                    <Select 
+                      value={formData.unit} 
+                      onValueChange={(value) => handleInputChange("unit", value)}
+                      disabled={availableUnits.length === 0}
+                    >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select unit" />
+                        <SelectValue placeholder={
+                          availableUnits.length === 0 ? "No units available" : "Select unit"
+                        } />
                       </SelectTrigger>
                       <SelectContent>
-                        {units.map((unit) => (
+                        {availableUnits.map((unit) => (
                           <SelectItem key={unit} value={unit}>
                             {unit}
                           </SelectItem>
@@ -526,48 +638,48 @@ export default function ListProducePage() {
                   {/* Image Upload */}
                   <div className="space-y-2">
                     <Label>Upload Image *</Label>
-                   <div 
-  className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 cursor-pointer hover:bg-muted/20 transition-colors"
-  onClick={() => document.getElementById('image-upload')?.click()}
->
-  {imagePreview ? (
-    <div className="relative">
-      <img
-        src={imagePreview || "/placeholder.svg"}
-        alt="Produce preview"
-        className="w-full h-48 object-cover rounded-lg"
-      />
-      <Button
-        type="button"
-        variant="destructive"
-        size="sm"
-        className="absolute top-2 right-2"
-        onClick={(e) => {
-          e.stopPropagation(); // Prevent triggering the container click
-          removeImage();
-        }}
-      >
-        <X className="h-4 w-4" />
-      </Button>
-    </div>
-  ) : (
-    <div className="text-center">
-      <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-      <div className="mt-4">
-        <span className="mt-2 block text-sm font-medium text-muted-foreground">
-          Click to upload produce image
-        </span>
-        <input
-          id="image-upload"
-          type="file"
-          accept="image/*"
-          onChange={handleImageSelect}
-          className="hidden"
-        />
-      </div>
-    </div>
-  )}
-</div>
+                    <div 
+                      className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 cursor-pointer hover:bg-muted/20 transition-colors"
+                      onClick={() => document.getElementById('image-upload')?.click()}
+                    >
+                      {imagePreview ? (
+                        <div className="relative">
+                          <img
+                            src={imagePreview || "/placeholder.svg"}
+                            alt="Produce preview"
+                            className="w-full h-48 object-cover rounded-lg"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="absolute top-2 right-2"
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent triggering the container click
+                              removeImage();
+                            }}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+                          <div className="mt-4">
+                            <span className="mt-2 block text-sm font-medium text-muted-foreground">
+                              Click to upload produce image
+                            </span>
+                            <input
+                              id="image-upload"
+                              type="file"
+                              accept="image/*"
+                              onChange={handleImageSelect}
+                              className="hidden"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -584,7 +696,7 @@ export default function ListProducePage() {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={loading || !formData.farmerId}
+                  disabled={loading || !formData.farmerId || !formData.size || !selectedImage}
                   className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 flex items-center gap-2"
                 >
                   {loading ? (

@@ -253,7 +253,7 @@ export default function ViewProducePage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => router.push("/Extensionofficers/dashboard/extension")}
+                onClick={() => router.push("/Extensionofficers/dashboard/extension/view-produce")}
                 className="flex items-center gap-2"
               >
                 <ArrowLeft className="h-4 w-4" />
