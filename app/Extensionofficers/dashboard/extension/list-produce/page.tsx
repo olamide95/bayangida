@@ -334,7 +334,7 @@ export default function ListProducePage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => router.push("/dashboard/extension")}
+                onClick={() => router.push("/Extensionofficers/dashboard/extension")}
                 className="flex items-center gap-2"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -526,44 +526,48 @@ export default function ListProducePage() {
                   {/* Image Upload */}
                   <div className="space-y-2">
                     <Label>Upload Image *</Label>
-                    <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6">
-                      {imagePreview ? (
-                        <div className="relative">
-                          <img
-                            src={imagePreview || "/placeholder.svg"}
-                            alt="Produce preview"
-                            className="w-full h-48 object-cover rounded-lg"
-                          />
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            className="absolute top-2 right-2"
-                            onClick={removeImage}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="text-center">
-                          <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                          <div className="mt-4">
-                            <label htmlFor="image-upload" className="cursor-pointer">
-                              <span className="mt-2 block text-sm font-medium text-muted-foreground">
-                                Click to upload produce image
-                              </span>
-                              <input
-                                id="image-upload"
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageSelect}
-                                className="hidden"
-                              />
-                            </label>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                   <div 
+  className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 cursor-pointer hover:bg-muted/20 transition-colors"
+  onClick={() => document.getElementById('image-upload')?.click()}
+>
+  {imagePreview ? (
+    <div className="relative">
+      <img
+        src={imagePreview || "/placeholder.svg"}
+        alt="Produce preview"
+        className="w-full h-48 object-cover rounded-lg"
+      />
+      <Button
+        type="button"
+        variant="destructive"
+        size="sm"
+        className="absolute top-2 right-2"
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent triggering the container click
+          removeImage();
+        }}
+      >
+        <X className="h-4 w-4" />
+      </Button>
+    </div>
+  ) : (
+    <div className="text-center">
+      <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+      <div className="mt-4">
+        <span className="mt-2 block text-sm font-medium text-muted-foreground">
+          Click to upload produce image
+        </span>
+        <input
+          id="image-upload"
+          type="file"
+          accept="image/*"
+          onChange={handleImageSelect}
+          className="hidden"
+        />
+      </div>
+    </div>
+  )}
+</div>
                   </div>
                 </div>
               </div>
