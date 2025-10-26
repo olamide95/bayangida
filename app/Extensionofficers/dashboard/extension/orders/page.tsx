@@ -151,10 +151,10 @@ export default function FarmerOrdersPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+                <BreadcrumbLink href="//Extensionofficers/dashboard">Dashboard</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/dashboard/extension">Extension Services</BreadcrumbLink>
+                <BreadcrumbLink href="//Extensionofficers/dashboard">Extension Services</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem>
                 <BreadcrumbPage>Farmer Orders</BreadcrumbPage>
