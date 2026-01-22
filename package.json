@@ -55,7 +55,7 @@
     "framer-motion": "^12.4.7",
     "input-otp": "1.4.1",
     "lucide-react": "^0.475.0",
-    "next": "15.2.4",
+    "next": "15.2.8",
     "next-themes": "latest",
     "node-mailjet": "^6.0.6",
         "react-hook-form": "^7.54.1",
