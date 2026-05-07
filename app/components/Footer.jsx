@@ -136,35 +136,59 @@ const Footer = () => {
           </div>
 
           {/* Third Column: Mobile App */}
-          <div>
-            <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[29.39px] mb-6">
-              Get the Bayangida Mobile App
-            </h3>
-            {/* App Download Links */}
-            <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 space-x-0">
-              <Link href="/products" className={`${styles.storeButton} ${styles.appStoreButton}`}>
-                <img src="/images/android.png" alt="Download on App Store" />
-              </Link>
-              <Link href="/products" className={`${styles.storeButton} ${styles.playStoreButton}`}>
-                <img src="/images/ios.png" alt="Get it on Google Play" />
-              </Link>
-            </div>
+   {/* Third Column: Mobile App */}
+<div className="flex flex-col gap-8">
+  {/* User App */}
+  <div>
+    <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[29.39px] mb-2">
+      Get the Bayangida User App
+    </h3>
+    <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 space-x-0">
+      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
+        <img src="/images/android.png" alt="Download on Google Play" />
+      </a>
+      <a href="#" className={`${styles.storeButton} ${styles.playStoreButton}`}>
+        <img src="/images/ios.png" alt="App Store - Coming Soon" />
+      </a>
+    </div>
+  </div>
 
-            {/* Sign In Buttons */}
-            <div className="flex flex-col space-y-4 mt-4">
-              <Link href="/products">
-                <button className="w-full md:w-[260px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
-                  Sign In as a Farmer
-                </button>
-              </Link>
-              <Link href="/products">
-                <button className="w-full md:w-[260px] h-[43.19px] bg-[#0B7F40] rounded-full font-inter font-normal text-sm leading-[18.15px] text-white hover:bg-[#095c32] transition-colors">
-                  Sign In as Logistics Provider
-                </button>
-              </Link>
-            </div>
-          </div>
+  {/* Logistics App */}
+  <div>
+    <h3
+      className="font-cabinet-grotesk font-bold text-2xl leading-[29.39px] mb-2"
+      style={{ color: '#0B7F40' }}
+    >
+      Get the Bayangida Logistics
+    </h3>
+    <div className="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0 space-x-0">
+      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida_logistics&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
+        <img src="/images/android.png" alt="Download on Google Play" />
+      </a>
+      <a href="https://apps.apple.com/ng/app/bayangida-logistics/id6752229806" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.playStoreButton}`}>
+        <img src="/images/ios.png" alt="Download on App Store" />
+      </a>
+    </div>
+  </div>
 
+  {/* Farmers App */}
+  <div>
+    <h3
+      className="font-cabinet-grotesk font-bold text-2xl leading-[29.39px] mb-2"
+      style={{ color: '#14b50c' }}
+    >
+      Get the Bayangida Farmers
+    </h3>
+    <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 space-x-0">
+      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida_farmers&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
+        <img src="/images/android.png" alt="Download on Google Play" />
+      </a>
+      <a href="https://apps.apple.com/ng/app/bayangida-farmers/id6749451089" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.playStoreButton}`}>
+        <img src="/images/ios.png" alt="Download on App Store" />
+      </a>
+    </div>
+  </div>
+</div>
           {/* Fourth Column: Newsletter */}
           <div>
             <h3 className="font-cabinet-grotesk font-bold text-2xl leading-[31.2px] mb-6">Newsletter</h3>

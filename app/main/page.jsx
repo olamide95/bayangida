@@ -32,16 +32,7 @@ export default function Main() {
         <About />
       </motion.div>
 
-      {/* Waitlist Section with Animation */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        viewport={{ once: true }}
-        className={styles.waitlistWrapper}
-      >
-        <Waitlist />
-      </motion.div>
+      
 
       {/* Latest News Section with Animation */}
       <motion.div
