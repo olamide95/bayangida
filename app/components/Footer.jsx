@@ -144,10 +144,10 @@ const Footer = () => {
       Get the Bayangida User App
     </h3>
     <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 space-x-0">
-      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
+      <a href="#" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
         <img src="/images/android.png" alt="Download on Google Play" />
       </a>
-      <a href="#" className={`${styles.storeButton} ${styles.playStoreButton}`}>
+      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida&pcampaignid=web_share" className={`${styles.storeButton} ${styles.playStoreButton}`}>
         <img src="/images/ios.png" alt="App Store - Coming Soon" />
       </a>
     </div>
@@ -162,10 +162,10 @@ const Footer = () => {
       Get the Bayangida Logistics
     </h3>
     <div className="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0 space-x-0">
-      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida_logistics&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
+      <a href="https://apps.apple.com/ng/app/bayangida-logistics/id6752229806" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
         <img src="/images/android.png" alt="Download on Google Play" />
       </a>
-      <a href="https://apps.apple.com/ng/app/bayangida-logistics/id6752229806" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.playStoreButton}`}>
+      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida_logistics&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.playStoreButton}`}>
         <img src="/images/ios.png" alt="Download on App Store" />
       </a>
     </div>
@@ -180,10 +180,10 @@ const Footer = () => {
       Get the Bayangida Farmers
     </h3>
     <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 space-x-0">
-      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida_farmers&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
+      <a href="https://apps.apple.com/ng/app/bayangida-farmers/id6749451089" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.appStoreButton}`}>
         <img src="/images/android.png" alt="Download on Google Play" />
       </a>
-      <a href="https://apps.apple.com/ng/app/bayangida-farmers/id6749451089" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.playStoreButton}`}>
+      <a href="https://play.google.com/store/apps/details?id=com.bayangida.bayangida_farmers&pcampaignid=web_share" target="_blank" rel="noopener noreferrer" className={`${styles.storeButton} ${styles.playStoreButton}`}>
         <img src="/images/ios.png" alt="Download on App Store" />
       </a>
     </div>
